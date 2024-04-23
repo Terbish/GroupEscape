@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "638295252137",
+    "project_id": "groupescape-7b6a4",
+    "storage_bucket": "groupescape-7b6a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638295252137:android:089498855b9b7d5f561db8",
+        "android_client_info": {
+          "package_name": "com.example.group_escape"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlyFyfbyFdKjZWbSqJD1koCQxrP1l-ofM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
