@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loggedIn = false;
   User? _currentUser;
 
@@ -52,20 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
         : Scaffold(
             appBar: AppBar(
               title: const Text('Chat Escape'),
-              // actions: [
-              //   IconButton(
-              //     icon: Icon(Icons.logout),
-              //     onPressed: () {
-              //       auth.logout().then((value) {
-              //         if (value) {
-              //           setState(() {
-              //             _message = 'User Logged Out';
-              //           });
-              //         } else {
-              //           _message = 'Unable to Log Out';
-              //         }});},),],
             ),
-            body: Container(
+            body: Form(
+              key: _formKey,
+              child:Container(
               padding: EdgeInsets.all(36),
               child: ListView(
                 children: [
@@ -76,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   txtMessage(),
                 ],
               ),
-            ));
+            )));
   }
 
   Widget userInput() {
@@ -89,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Email', icon: Icon(Icons.verified_user)),
           // validator: (text) => text.isEmpty ? 'User Name is required'
           //     : '',
-          validator: (text) => text!.isEmpty ? 'Password is required' : '',
+          validator: (text) => text!.isEmpty ? 'Email is required' : null,
         ));
   }
 
@@ -104,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'password', icon: Icon(Icons.enhanced_encryption)),
           // validator: (text) => text.isEmpty ? 'Password is required'
           //     : '',
-          validator: (text) => text!.isEmpty ? 'Password is required' : '',
+          validator: (text) => text!.isEmpty ? 'Password is required' : null,
         ));
   }
 
@@ -127,56 +118,59 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(btnText,
                   style: const TextStyle(fontSize: 18, color: Colors.black)),
               onPressed: () {
-                String userId = '';
-                if (_isLogin) {
-                  auth
-                      .login(txtUserName.text, txtPassword.text)
-                      .then((value) async {
-                    if (value == null) {
-                      setState(() {
-                        _message = 'Login Error';
-                      });
-                    } else {
-                      final userId = value;
-                      final userSnapshot = await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(userId)
-                          .get();
-                      final user = User.fromFirestore(userSnapshot);
-                      setState(() {
-                        _currentUser = user;
-                        _message = 'User $userId successfully logged in';
-                        loggedIn = true;
-                      });
-                    }
-                  });
-                } else {
-                  auth
-                      .createUser(txtUserName.text, txtPassword.text)
-                      .then((value) async {
-                    if (value == null) {
-                      setState(() {
-                        _message = 'Registration Error';
-                      });
-                    } else {
-                      final userId = value;
-                      final userDoc = FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(userId);
-                      await userDoc.set({
-                        'email': txtUserName.text,
-                        'name': txtUserName.text.split('@')[0],
-                      });
-                      final userSnapshot = await userDoc.get();
-                      final user = User.fromFirestore(userSnapshot);
+                if(_formKey.currentState?.validate() ?? false) {
+                  String userId = '';
 
-                      setState(() {
-                        _currentUser = user;
-                        _message = 'User ${user.name} successfully signed in';
-                        loggedIn = true;
-                      });
-                    }
-                  });
+                  if (_isLogin) {
+                    auth
+                        .login(txtUserName.text, txtPassword.text)
+                        .then((value) async {
+                      if (value == null) {
+                        setState(() {
+                          _message = 'Login Error';
+                        });
+                      } else {
+                        final userId = value;
+                        final userSnapshot = await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(userId)
+                            .get();
+                        final user = User.fromFirestore(userSnapshot);
+                        setState(() {
+                          _currentUser = user;
+                          _message = 'User $userId successfully logged in';
+                          loggedIn = true;
+                        });
+                      }
+                    });
+                  } else {
+                    auth
+                        .createUser(txtUserName.text, txtPassword.text)
+                        .then((value) async {
+                      if (value == null) {
+                        setState(() {
+                          _message = 'Registration Error';
+                        });
+                      } else {
+                        final userId = value;
+                        final userDoc = FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(userId);
+                        await userDoc.set({
+                          'email': txtUserName.text,
+                          'name': txtUserName.text.split('@')[0],
+                        });
+                        final userSnapshot = await userDoc.get();
+                        final user = User.fromFirestore(userSnapshot);
+
+                        setState(() {
+                          _currentUser = user;
+                          _message = 'User ${user.name} successfully signed in';
+                          loggedIn = true;
+                        });
+                      }
+                    });
+                  }
                 }
               },
             )));
