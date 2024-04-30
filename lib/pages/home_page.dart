@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 
+import "../model/user_model.dart";
 import "create_trip.dart";
 import "/widgets/join_trip_dialog.dart";
 
 class HomePage extends StatelessWidget {
   final void Function() logOut;
-  const HomePage({super.key, required this.logOut});
+  final User? currentUser;
+  const HomePage({super.key, required this.logOut, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
             IconButton(
-              icon: Icon(Icons.logout),
+              icon: const Icon(Icons.logout),
               onPressed: logOut,
             ),
           ],

@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/pages/home_page.dart';
 
+import '../model/user_model.dart';
 import '../shared/firebase_authentication.dart';
 
 class LoginScreen extends StatefulWidget {
-
   const LoginScreen({super.key});
 
   @override
@@ -14,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool loggedIn = false;
+  User? _currentUser;
 
   late FirebaseAuthentication auth;
   String _message = '';
@@ -39,40 +41,42 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       } else {
         _message = 'Unable to Log Out';
-      }});}
-
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return loggedIn ? HomePage(logOut: _logOut)
+    return loggedIn
+        ? HomePage(logOut: _logOut, currentUser: _currentUser)
         : Scaffold(
-        appBar: AppBar(
-          title: Text('Login Screen'),
-          // actions: [
-          //   IconButton(
-          //     icon: Icon(Icons.logout),
-          //     onPressed: () {
-          //       auth.logout().then((value) {
-          //         if (value) {
-          //           setState(() {
-          //             _message = 'User Logged Out';
-          //           });
-          //         } else {
-          //           _message = 'Unable to Log Out';
-          //         }});},),],
-        ),
-        body: Container(
-          padding: EdgeInsets.all(36),
-          child: ListView(
-            children: [
-              userInput(),
-              passwordInput(),
-              btnMain(),
-              btnSecondary(),
-              txtMessage(),
-            ],
-          ),
-        ));
+            appBar: AppBar(
+              title: const Text('Chat Escape'),
+              // actions: [
+              //   IconButton(
+              //     icon: Icon(Icons.logout),
+              //     onPressed: () {
+              //       auth.logout().then((value) {
+              //         if (value) {
+              //           setState(() {
+              //             _message = 'User Logged Out';
+              //           });
+              //         } else {
+              //           _message = 'Unable to Log Out';
+              //         }});},),],
+            ),
+            body: Container(
+              padding: EdgeInsets.all(36),
+              child: ListView(
+                children: [
+                  userInput(),
+                  passwordInput(),
+                  btnMain(),
+                  btnSecondary(),
+                  txtMessage(),
+                ],
+              ),
+            ));
   }
 
   Widget userInput() {
@@ -85,8 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Email', icon: Icon(Icons.verified_user)),
           // validator: (text) => text.isEmpty ? 'User Name is required'
           //     : '',
-          validator: (text) =>
-          text!.isEmpty ? 'Password is required' : '',
+          validator: (text) => text!.isEmpty ? 'Password is required' : '',
         ));
   }
 
@@ -98,8 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
           keyboardType: TextInputType.emailAddress,
           obscureText: true,
           decoration: InputDecoration(
-              hintText: 'password', icon:
-          Icon(Icons.enhanced_encryption)),
+              hintText: 'password', icon: Icon(Icons.enhanced_encryption)),
           // validator: (text) => text.isEmpty ? 'Password is required'
           //     : '',
           validator: (text) => text!.isEmpty ? 'Password is required' : '',
@@ -113,50 +115,70 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Container(
             height: 60,
             child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all
-                    (Theme
-                      .of(context)
-                      .primaryColorLight),
-                  shape: MaterialStateProperty.all
-                  <RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                        side: BorderSide(color: Colors.black)),
-                  ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).primaryColorLight),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24.0),
+                      side: BorderSide(color: Colors.black)),
                 ),
-                child: Text(
-                  btnText,
-                  style: const TextStyle(
-                      fontSize: 18, color: Colors.black
-              )),
+              ),
+              child: Text(btnText,
+                  style: const TextStyle(fontSize: 18, color: Colors.black)),
               onPressed: () {
                 String userId = '';
                 if (_isLogin) {
-                  auth.login(txtUserName.text, txtPassword.text).then((value) {
+                  auth
+                      .login(txtUserName.text, txtPassword.text)
+                      .then((value) async {
                     if (value == null) {
                       setState(() {
                         _message = 'Login Error';
                       });
                     } else {
-                      userId = value;
+                      final userId = value;
+                      final userSnapshot = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId)
+                          .get();
+                      final user = User.fromFirestore(userSnapshot);
                       setState(() {
+                        _currentUser = user;
                         _message = 'User $userId successfully logged in';
                         loggedIn = true;
-                      });}});
+                      });
+                    }
+                  });
                 } else {
-                  auth.createUser(txtUserName.text,
-                      txtPassword.text).then((value) {
+                  auth
+                      .createUser(txtUserName.text, txtPassword.text)
+                      .then((value) async {
                     if (value == null) {
                       setState(() {
                         _message = 'Registration Error';
                       });
                     } else {
-                      userId = value;
+                      final userId = value;
+                      final userDoc = FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId);
+                      await userDoc.set({
+                        'email': txtUserName.text,
+                        'name': txtUserName.text.split('@')[0],
+                      });
+                      final userSnapshot = await userDoc.get();
+                      final user = User.fromFirestore(userSnapshot);
+
                       setState(() {
-                        _message = 'User $userId successfully signed in';
+                        _currentUser = user;
+                        _message = 'User ${user.name} successfully signed in';
                         loggedIn = true;
-                      });}});}},
+                      });
+                    }
+                  });
+                }
+              },
             )));
   }
 
@@ -168,15 +190,17 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLogin = !_isLogin;
         });
-      },);
+      },
+    );
   }
 
   Widget txtMessage() {
     return Text(
       _message,
       style: TextStyle(
-          fontSize: 16, color: Theme.of(context).primaryColorDark,
+          fontSize: 16,
+          color: Theme.of(context).primaryColorDark,
           fontWeight: FontWeight.bold),
-    );}
-
+    );
+  }
 }
