@@ -49,7 +49,15 @@ class _LoginScreenState extends State<LoginScreen> {
         ? HomePage(logOut: _logOut)
         : Scaffold(
             appBar: AppBar(
-              title: const Text('Chat Escape'),
+              title: const Text(
+                  'Chat Escape',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 25,
+                ),
+              ),
+              backgroundColor: Colors.blue,
             ),
             body: Form(
               key: _formKey,
@@ -116,8 +124,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: const TextStyle(fontSize: 18, color: Colors.black)),
               onPressed: () {
                 if(_formKey.currentState?.validate() ?? false) {
-                  String userId = '';
-
                   if (_isLogin) {
                     auth
                         .login(txtUserName.text, txtPassword.text)
@@ -128,10 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       } else {
                         final userId = value;
-                        final userSnapshot = await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(userId)
-                            .get();
                         setState(() {
                           _message = 'User $userId successfully logged in';
                           loggedIn = true;
@@ -155,8 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           'email': txtUserName.text,
                           'name': txtUserName.text.split('@')[0],
                         });
-                        final userSnapshot = await userDoc.get();
-
                         setState(() {
                           _message = 'User $userId successfully signed in';
                           loggedIn = true;

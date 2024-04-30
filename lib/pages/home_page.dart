@@ -16,7 +16,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Your Trips'),
+          title: const Text(
+              'Your Trips',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 25,
+            ),
+          ),
+          backgroundColor: Colors.blue,
           actions: [
             PopupMenuButton(
               child: const Icon(Icons.add),
@@ -62,25 +70,31 @@ class HomePage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           }
-
           return ListView(
             children: snapshot.data!.docs.map((doc) {
-              return ListTile(
-                title: Text(doc['tripName']),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TripDetailsPage(
-                        tripId: doc.id,
-                        tripName: doc['tripName'],
-                        startDate: doc['startDate'],
-                        endDate: doc['endDate'],
-                        locations: List<String>.from(doc['locations']),
-                      ),
+              return Card(
+                child: ListTile(
+                  title: Text(
+                    doc['tripName'],
+                    style: TextStyle(
+                      fontSize: 20,
                     ),
-                  );
-                },
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TripDetailsPage(
+                          tripId: doc.id,
+                          tripName: doc['tripName'],
+                          startDate: doc['startDate'],
+                          endDate: doc['endDate'],
+                          locations: List<String>.from(doc['locations']),
+                        ),
+                      ),
+                    );
+                  },
+                )
               );
             }).toList(),
           );
