@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/pages/home_page.dart';
-
-import '../model/user_model.dart';
 import '../shared/firebase_authentication.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,7 +14,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loggedIn = false;
-  User? _currentUser;
 
   late FirebaseAuthentication auth;
   String _message = '';
@@ -49,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return loggedIn
-        ? HomePage(logOut: _logOut, currentUser: _currentUser)
+        ? HomePage(logOut: _logOut)
         : Scaffold(
             appBar: AppBar(
               title: const Text('Chat Escape'),
@@ -135,9 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             .collection('users')
                             .doc(userId)
                             .get();
-                        final user = User.fromFirestore(userSnapshot);
                         setState(() {
-                          _currentUser = user;
                           _message = 'User $userId successfully logged in';
                           loggedIn = true;
                         });
@@ -161,11 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           'name': txtUserName.text.split('@')[0],
                         });
                         final userSnapshot = await userDoc.get();
-                        final user = User.fromFirestore(userSnapshot);
 
                         setState(() {
-                          _currentUser = user;
-                          _message = 'User ${user.name} successfully signed in';
+                          _message = 'User $userId successfully signed in';
                           loggedIn = true;
                         });
                       }

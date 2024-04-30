@@ -8,8 +8,8 @@ import 'trip_details.dart';
 
 class HomePage extends StatelessWidget {
   final void Function() logOut;
-  final User? currentUser;
-  const HomePage({super.key, required this.logOut, required this.currentUser});
+
+  const HomePage({super.key, required this.logOut});
 
 
   @override
