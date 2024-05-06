@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
             body: Form(
               key: _formKey,
               child:Container(
-              padding: EdgeInsets.all(36),
+              padding: const EdgeInsets.all(36),
               child: ListView(
                 children: [
                   userInput(),
@@ -77,11 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget userInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 128),
+        padding: const EdgeInsets.only(top: 128),
         child: TextFormField(
           controller: txtUserName,
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               hintText: 'Email', icon: Icon(Icons.verified_user)),
           // validator: (text) => text.isEmpty ? 'User Name is required'
           //     : '',
@@ -91,12 +91,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget passwordInput() {
     return Padding(
-        padding: EdgeInsets.only(top: 24),
+        padding: const EdgeInsets.only(top: 24),
         child: TextFormField(
           controller: txtPassword,
           keyboardType: TextInputType.emailAddress,
           obscureText: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               hintText: 'password', icon: Icon(Icons.enhanced_encryption)),
           // validator: (text) => text.isEmpty ? 'Password is required'
           //     : '',
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget btnMain() {
     String btnText = _isLogin ? 'Log in' : 'Sign up';
     return Padding(
-        padding: EdgeInsets.only(top: 128),
+        padding: const EdgeInsets.only(top: 128),
         child: Container(
             height: 60,
             child: ElevatedButton(
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24.0),
-                      side: BorderSide(color: Colors.black)),
+                      side: const BorderSide(color: Colors.black)),
                 ),
               ),
               child: Text(btnText,
