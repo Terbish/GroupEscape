@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
         : Scaffold(
             appBar: AppBar(
               title: const Text(
-                  'Chat Escape',
+                'Chat Escape',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -60,19 +60,19 @@ class _LoginScreenState extends State<LoginScreen> {
               backgroundColor: Colors.blue,
             ),
             body: Form(
-              key: _formKey,
-              child:Container(
-              padding: const EdgeInsets.all(36),
-              child: ListView(
-                children: [
-                  userInput(),
-                  passwordInput(),
-                  btnMain(),
-                  btnSecondary(),
-                  txtMessage(),
-                ],
-              ),
-            )));
+                key: _formKey,
+                child: Container(
+                  padding: const EdgeInsets.all(36),
+                  child: ListView(
+                    children: [
+                      userInput(),
+                      passwordInput(),
+                      btnMain(),
+                      btnSecondary(),
+                      txtMessage(),
+                    ],
+                  ),
+                )));
   }
 
   Widget userInput() {
@@ -85,7 +85,16 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: 'Email', icon: Icon(Icons.verified_user)),
           // validator: (text) => text.isEmpty ? 'User Name is required'
           //     : '',
-          validator: (text) => text!.isEmpty ? 'Email is required' : null,
+          validator: (text) {
+            if (text!.isEmpty) {
+              return 'User Name is required';
+            } else if (!RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                .hasMatch(text)) {
+              return 'Please enter a valid email address';
+            }
+            return null;
+          },
         ));
   }
 
@@ -123,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(btnText,
                   style: const TextStyle(fontSize: 18, color: Colors.black)),
               onPressed: () {
-                if(_formKey.currentState?.validate() ?? false) {
+                if (_formKey.currentState?.validate() ?? false) {
                   if (_isLogin) {
                     auth
                         .login(txtUserName.text, txtPassword.text)

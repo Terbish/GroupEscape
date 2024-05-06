@@ -22,7 +22,7 @@ class TripDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
             tripName,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
             fontSize: 25,
