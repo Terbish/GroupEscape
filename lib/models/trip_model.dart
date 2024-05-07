@@ -1,3 +1,4 @@
+
 class TripModel{
   final String userId;
   final String tripName;

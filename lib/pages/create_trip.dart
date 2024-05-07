@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:group_escape/models/availability_model.dart';
-import 'package:group_escape/util/availability.dart';
 
 import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
@@ -17,8 +14,6 @@ class _CreateTripState extends State<CreateTrip> {
   final _formKey = GlobalKey<FormState>();
   final _firestoreService = FirestoreService();
   String _tripName = '';
-  // String _startDate = '';
-  // String _endDate = '';
   List<String> _locations = [];
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
@@ -53,20 +48,8 @@ class _CreateTripState extends State<CreateTrip> {
         locations: _locations,
       );
 
-      String tripId = await _firestoreService.addTrip(tripModel);
+      await _firestoreService.addTrip(tripModel);
 
-      Availability availability = Availability(
-        startDate: Timestamp.fromDate(_startDate),
-        endDate: Timestamp.fromDate(_endDate),
-      );
-
-      AvailabilityModel availabilityModel = AvailabilityModel(
-        userId: userId,
-        tripId: tripId,
-        availability: [availability],
-      );
-
-      await _firestoreService.addAvailability(tripId, userId, availabilityModel.toJson());
       // Navigate back to the home page
       Navigator.pop(context);
     }
