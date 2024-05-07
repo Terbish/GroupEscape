@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:group_escape/models/availability_model.dart';
 import 'package:group_escape/util/availability.dart';
 
 import '../models/trip_model.dart';
@@ -44,29 +43,32 @@ class _CreateTripState extends State<CreateTrip> {
       // Get currently logged-in user's UID
       String userId = FirebaseAuth.instance.currentUser!.uid;
 
-      // Create a new TripModel object
-      TripModel tripModel = TripModel(
-        userId: userId,
-        tripName: _tripName,
-        startDate: _startDate.toString(),
-        endDate: _endDate.toString(),
-        locations: _locations,
-      );
-
-      String tripId = await _firestoreService.addTrip(tripModel);
-
       Availability availability = Availability(
         startDate: Timestamp.fromDate(_startDate),
         endDate: Timestamp.fromDate(_endDate),
       );
 
-      AvailabilityModel availabilityModel = AvailabilityModel(
+      // Create a new TripModel object
+      TripModel tripModel = TripModel(
         userId: userId,
-        tripId: tripId,
+        tripName: _tripName,
+        // startDate: _startDate.toString(),
+        // endDate: _endDate.toString(),
+        locations: _locations,
         availability: [availability],
       );
 
-      await _firestoreService.addAvailability(tripId, userId, availabilityModel.toJson());
+      String tripId = await _firestoreService.addTrip(tripModel);
+
+
+
+      // AvailabilityModel availabilityModel = AvailabilityModel(
+      //   userId: userId,
+      //   tripId: tripId,
+      //   availability: [availability],
+      // );
+
+      // await _firestoreService.addAvailability(tripId, userId, [availability] as Map<String, dynamic>);
       // Navigate back to the home page
       Navigator.pop(context);
     }
@@ -106,30 +108,6 @@ class _CreateTripState extends State<CreateTrip> {
                   _tripName = value!;
                 },
               ),
-              // TextFormField(
-              //   decoration: const InputDecoration(labelText: 'Start Date'),
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return 'Please enter a start date';
-              //     }
-              //     return null;
-              //   },
-              //   onSaved: (value) {
-              //     _startDate = value! as DateTime;
-              //   },
-              // ),
-              // TextFormField(
-              //   decoration: const InputDecoration(labelText: 'End Date'),
-              //   validator: (value) {
-              //     if (value == null || value.isEmpty) {
-              //       return 'Please enter an end date';
-              //     }
-              //     return null;
-              //   },
-              //   onSaved: (value) {
-              //     _endDate = value! as DateTime;
-              //   },
-              // ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Locations'),
                 validator: (value) {

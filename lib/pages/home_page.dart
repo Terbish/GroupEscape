@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:group_escape/services/firestore_service.dart';
+import '../util/availability.dart';
 import 'create_trip.dart';
 import '/widgets/join_trip_dialog.dart';
 import 'trip_details.dart';
@@ -8,8 +10,9 @@ import 'trip_details.dart';
 
 class HomePage extends StatelessWidget {
   final void Function() logOut;
+  final FirestoreService _firestoreService = FirestoreService();
 
-  const HomePage({super.key, required this.logOut});
+  HomePage({super.key, required this.logOut});
 
 
   @override
@@ -80,6 +83,10 @@ class HomePage extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_sharp),
+                    onPressed: () => _firestoreService.deleteTrip(doc.id),
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -87,8 +94,10 @@ class HomePage extends StatelessWidget {
                         builder: (context) => TripDetailsPage(
                           tripId: doc.id,
                           tripName: doc['tripName'],
-                          startDate: doc['startDate'],
-                          endDate: doc['endDate'],
+                          availability: List<Availability>.from(doc['availability'].map((e) => Availability(
+                            startDate: e['startDate'],
+                            endDate: e['endDate'],
+                          ))),
                           locations: List<String>.from(doc['locations']),
                         ),
                       ),

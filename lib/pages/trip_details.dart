@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../util/availability.dart';
 
 class TripDetailsPage extends StatelessWidget {
   final String tripId;
   final String tripName;
-  final String startDate;
-  final String endDate;
+  final List<Availability> availability;
   final List<String> locations;
 
   const TripDetailsPage({
     super.key,
     required this.tripId,
     required this.tripName,
-    required this.startDate,
-    required this.endDate,
+    required this.availability,
     required this.locations,
   });
 
@@ -37,11 +38,16 @@ class TripDetailsPage extends StatelessWidget {
           children: [
             Text('Trip Name: $tripName'),
             const SizedBox(height: 8.0),
-            Text('Start Date: $startDate'),
-            const SizedBox(height: 8.0),
-            Text('End Date: $endDate'),
-            const SizedBox(height: 8.0),
+            // Text('Start Date: $startDate'),
+            // const SizedBox(height: 8.0),
+            // Text('End Date: $endDate'),
+            // const SizedBox(height: 8.0),
+            Text('Availability:'),
+            for (var avail in availability)
+              Text('${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}'),
             Text('Location(s): ${locations.join(', ')}'),
+            const SizedBox(height: 16.0),
+
           ],
         ),
       ),

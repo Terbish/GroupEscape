@@ -12,4 +12,8 @@ class FirestoreService{
     Future<void> addAvailability(String tripId, String userId, Map<String, dynamic> availability) async{
       await _db.collection('trips').doc(tripId).collection('availability').doc(userId).set(availability);
     }
+
+    Future<void> deleteTrip(String tripId) async{
+      await _db.collection('trips').doc(tripId).delete();
+    }
 }
