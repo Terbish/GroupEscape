@@ -4,7 +4,16 @@ import 'package:group_escape/models/trip_model.dart';
 class FirestoreService{
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-    Future<void> addTrip(TripModel trip) async{
-      await _db.collection('trips').add(trip.toJson());
+    Future<String> addTrip(TripModel trip) async{
+      DocumentReference docRef = await _db.collection('trips').add(trip.toJson());
+      return docRef.id;
+    }
+
+    Future<void> addAvailability(String tripId, String userId, Map<String, dynamic> availability) async{
+      await _db.collection('trips').doc(tripId).collection('availability').doc(userId).set(availability);
+    }
+
+    Future<void> deleteTrip(String tripId) async{
+      await _db.collection('trips').doc(tripId).delete();
     }
 }

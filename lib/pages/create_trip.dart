@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:group_escape/util/availability.dart';
 
 import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
@@ -15,9 +16,25 @@ class _CreateTripState extends State<CreateTrip> {
   final _formKey = GlobalKey<FormState>();
   final _firestoreService = FirestoreService();
   String _tripName = '';
-  String _startDate = '';
-  String _endDate = '';
+  // String _startDate = '';
+  // String _endDate = '';
   List<String> _locations = [];
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now();
+
+  void _showDateRangePicker(BuildContext context) async{
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 180)),
+    );
+    if(picked != null){
+      setState(() {
+        _startDate = picked.start;
+        _endDate = picked.end;
+      });
+    }
+  }
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -26,17 +43,32 @@ class _CreateTripState extends State<CreateTrip> {
       // Get currently logged-in user's UID
       String userId = FirebaseAuth.instance.currentUser!.uid;
 
+      Availability availability = Availability(
+        startDate: Timestamp.fromDate(_startDate),
+        endDate: Timestamp.fromDate(_endDate),
+      );
+
       // Create a new TripModel object
       TripModel tripModel = TripModel(
         userId: userId,
         tripName: _tripName,
-        startDate: _startDate,
-        endDate: _endDate,
+        // startDate: _startDate.toString(),
+        // endDate: _endDate.toString(),
         locations: _locations,
+        availability: [availability],
       );
 
-      await _firestoreService.addTrip(tripModel);
+      String tripId = await _firestoreService.addTrip(tripModel);
 
+
+
+      // AvailabilityModel availabilityModel = AvailabilityModel(
+      //   userId: userId,
+      //   tripId: tripId,
+      //   availability: [availability],
+      // );
+
+      // await _firestoreService.addAvailability(tripId, userId, [availability] as Map<String, dynamic>);
       // Navigate back to the home page
       Navigator.pop(context);
     }
@@ -77,30 +109,6 @@ class _CreateTripState extends State<CreateTrip> {
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Start Date'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a start date';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _startDate = value!;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'End Date'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an end date';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _endDate = value!;
-                },
-              ),
-              TextFormField(
                 decoration: const InputDecoration(labelText: 'Locations'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -111,6 +119,10 @@ class _CreateTripState extends State<CreateTrip> {
                 onSaved: (value) {
                   _locations = value!.split(',');
                 },
+              ),
+              ElevatedButton(
+                onPressed: () => _showDateRangePicker(context),
+                child: const Text('Select Date Range'),
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
