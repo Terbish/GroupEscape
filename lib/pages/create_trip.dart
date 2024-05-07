@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../models/trip_model.dart';
+import '../services/firestore_service.dart';
+
 class CreateTrip extends StatefulWidget {
   const CreateTrip({super.key});
 
@@ -10,6 +13,7 @@ class CreateTrip extends StatefulWidget {
 }
 class _CreateTripState extends State<CreateTrip> {
   final _formKey = GlobalKey<FormState>();
+  final _firestoreService = FirestoreService();
   String _tripName = '';
   String _startDate = '';
   String _endDate = '';
@@ -22,14 +26,16 @@ class _CreateTripState extends State<CreateTrip> {
       // Get currently logged-in user's UID
       String userId = FirebaseAuth.instance.currentUser!.uid;
 
-      // Create a new document in the "trips" collection with the user's UID
-      await FirebaseFirestore.instance.collection('trips').add({
-        'userId': userId,
-        'tripName': _tripName,
-        'startDate': _startDate,
-        'endDate': _endDate,
-        'locations': _locations,
-      });
+      // Create a new TripModel object
+      TripModel tripModel = TripModel(
+        userId: userId,
+        tripName: _tripName,
+        startDate: _startDate,
+        endDate: _endDate,
+        locations: _locations,
+      );
+
+      await _firestoreService.addTrip(tripModel);
 
       // Navigate back to the home page
       Navigator.pop(context);
