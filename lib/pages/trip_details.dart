@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 import '../util/availability.dart';
 
@@ -30,6 +31,14 @@ class TripDetailsPage extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.blue,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.ios_share),
+            onPressed:(){
+              Share.share('Check out this trip: $tripId');
+            }
+          )
+        ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

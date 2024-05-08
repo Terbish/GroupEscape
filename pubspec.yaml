@@ -41,6 +41,7 @@ dependencies:
   shared_preferences: ^2.0.15
   cloud_firestore: ^4.17.2
   intl:
+  share:
 
 dev_dependencies:
   mockito:
