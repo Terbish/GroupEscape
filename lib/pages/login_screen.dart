@@ -83,8 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
           keyboardType: TextInputType.emailAddress,
           decoration: const InputDecoration(
               hintText: 'Email', icon: Icon(Icons.verified_user)),
-          // validator: (text) => text.isEmpty ? 'User Name is required'
-          //     : '',
           validator: (text) {
             if (text!.isEmpty) {
               return 'User Name is required';
@@ -107,8 +105,6 @@ class _LoginScreenState extends State<LoginScreen> {
           obscureText: true,
           decoration: const InputDecoration(
               hintText: 'password', icon: Icon(Icons.enhanced_encryption)),
-          // validator: (text) => text.isEmpty ? 'Password is required'
-          //     : '',
           validator: (text) => text!.isEmpty ? 'Password is required' : null,
         ));
   }

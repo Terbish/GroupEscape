@@ -1,7 +1,7 @@
 import '../util/availability.dart';
 
 class TripModel{
-  final String userId;
+  final List<String> userIds;
   final String tripName;
   // final String startDate;
   // final String endDate;
@@ -9,7 +9,7 @@ class TripModel{
   final List<Availability> availability;
 
   TripModel({
-    required this.userId,
+    required this.userIds,
     required this.tripName,
     // required this.startDate,
     // required this.endDate,
@@ -19,7 +19,7 @@ class TripModel{
 
   Map<String, dynamic> toJson(){
     return {
-      'userId': userId,
+      'userId': userIds,
       'tripName': tripName,
       // 'startDate': startDate,
       // 'endDate': endDate,

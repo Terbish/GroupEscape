@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                 } else if (result == 'Join Trip') {
                   showDialog(
                     context: context,
-                    builder: (context) => const JoinTripDialog(),
+                    builder: (context) => JoinTripDialog(_firestoreService),
                   );
                 }
               },
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('trips')
-            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .where('userId', arrayContains: FirebaseAuth.instance.currentUser!.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -95,10 +95,12 @@ class HomePage extends StatelessWidget {
                           tripId: doc.id,
                           tripName: doc['tripName'],
                           availability: List<Availability>.from(doc['availability'].map((e) => Availability(
+                            userId: e['userID'],
                             startDate: e['startDate'],
                             endDate: e['endDate'],
                           ))),
                           locations: List<String>.from(doc['locations']),
+                          db: _firestoreService
                         ),
                       ),
                     );

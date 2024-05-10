@@ -41,16 +41,17 @@ class _CreateTripState extends State<CreateTrip> {
       _formKey.currentState!.save();
 
       // Get currently logged-in user's UID
-      String userId = FirebaseAuth.instance.currentUser!.uid;
+      List<String> userIds = [FirebaseAuth.instance.currentUser!.uid];
 
       Availability availability = Availability(
+        userId: FirebaseAuth.instance.currentUser!.uid,
         startDate: Timestamp.fromDate(_startDate),
         endDate: Timestamp.fromDate(_endDate),
       );
 
       // Create a new TripModel object
       TripModel tripModel = TripModel(
-        userId: userId,
+        userIds: userIds,
         tripName: _tripName,
         // startDate: _startDate.toString(),
         // endDate: _endDate.toString(),
