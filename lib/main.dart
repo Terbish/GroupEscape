@@ -42,9 +42,18 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       title: 'GroupEscape App',
-      home: LoginScreen(),
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+        primarySwatch: Colors.blue,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.blue,
+          selectionColor: Colors.blue,
+          selectionHandleColor: Colors.blue,
+        )
+      ),
+      home: const LoginScreen(),
     );
   }
 }

@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const CircularProgressIndicator(color: Colors.blue,);
           }
           return ListView(
             children: snapshot.data!.docs.map((doc) {
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
                             endDate: e['endDate'],
                           ))),
                           locations: List<String>.from(doc['locations']),
-                          db: _firestoreService
+                          db: _firestoreService, members: [],
                         ),
                       ),
                     );
