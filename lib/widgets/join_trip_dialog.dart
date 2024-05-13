@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:group_escape/util/availability.dart';
 
 class JoinTripDialog extends StatelessWidget {
   final firestoreService;
@@ -14,9 +15,9 @@ class JoinTripDialog extends StatelessWidget {
         const SnackBar(content: Text('Invalid ID')),
       );
     } else {
-      firestoreService.addUserToTrip(
+      await firestoreService.addUserToTrip(
           _controller.text, FirebaseAuth.instance.currentUser!.uid);
-      Navigator.pop(context, 'join');
+      Navigator.pop(context, _controller.text);
     }
   }
 
