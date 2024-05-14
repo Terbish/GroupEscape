@@ -5,7 +5,7 @@ import 'package:group_escape/services/firestore_service.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateMocks([FirestoreService, FirebaseAuthentication])
+@GenerateMocks([Firebase])
 void main() {
   group('Create Trip Test', (){
     testWidgets('CreateTrip widget renders correctly', (WidgetTester tester) async {
