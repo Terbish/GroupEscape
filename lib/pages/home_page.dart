@@ -111,7 +111,7 @@ class HomePage extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_sharp),
-                    onPressed: () => _firestoreService.deleteTrip(doc.id),
+                    onPressed: () => _firestoreService.deleteTrip(doc.id, FirebaseAuth.instance.currentUser!.uid),
                   ),
                   onTap: () {
                     Navigator.push(
