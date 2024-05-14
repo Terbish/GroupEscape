@@ -13,8 +13,19 @@ class FirestoreService{
     await _db.collection('trips').doc(tripId).collection('availability').doc(userId).set(availability);
   }
 
-  Future<void> deleteTrip(String tripId) async{
-    await _db.collection('trips').doc(tripId).delete();
+  Future<void> deleteTrip(String tripId, String userId) async{
+    final emptyTrip = await _db.collection('trips').doc(tripId).get().then((doc){
+      final data = doc.data() as Map<String, dynamic>;
+      return data['userId'].length ==  1;
+    });
+    if (emptyTrip == true){
+      await _db.collection('trips').doc(tripId).delete();
+    }
+    else {
+      await _db.collection('trips').doc(tripId).update({
+        'userId': FieldValue.arrayRemove([userId])
+      });
+    }
   }
 
   Future<bool> checkIfExists(String tripId) async {
@@ -31,7 +42,6 @@ class FirestoreService{
   Future<String> getUserName(String userId) async {
     return await _db.collection("users").doc(userId).get().then((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      print('\n\n\n\n ${data['name']} \n\n\n\n');
       return data['name'];
     });
   }
