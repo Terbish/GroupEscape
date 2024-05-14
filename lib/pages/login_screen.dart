@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/pages/home_page.dart';
 import '../shared/firebase_authentication.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final FirebaseAuth authInstance;
+
+  const LoginScreen(this.authInstance, {super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -23,10 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    Firebase.initializeApp().whenComplete(() {
-      auth = FirebaseAuthentication();
-      setState(() {});
-    });
+    // Firebase.initializeApp().whenComplete(() {
+    auth = FirebaseAuthentication();
+    setState(() {});
+    // });
     super.initState();
   }
 
@@ -46,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return loggedIn
-        ? HomePage(logOut: _logOut)
+        ? HomePage(widget.authInstance, logOut: _logOut)
         : Scaffold(
             appBar: AppBar(
               title: const Text(

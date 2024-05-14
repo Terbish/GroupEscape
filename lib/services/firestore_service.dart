@@ -45,8 +45,6 @@ class FirestoreService {
     }
   }
 
-
-
   Future<bool> checkIfExists(String tripId) async {
     var doc = await _db.collection('trips').doc(tripId).get();
     return doc.exists;
@@ -64,4 +62,27 @@ class FirestoreService {
       return data['name'];
     });
   }
+
+  // Future<List<Map<String, dynamic>>> getTrips(String userId) async {
+  //   final userTripsSnapshot = await _db.collection('trips').where('userId', arrayContains: userId).get();
+  //   final List<Map<String, dynamic>> userTrips = userTripsSnapshot.docs.map((doc) {
+  //     final dict =  doc.data();
+  //     dict['tripId'] = doc.id;
+  //     return dict;
+  //   }).toList();
+  //   return userTrips;
+  // }
+
+  Stream<List<Map<String, dynamic>>> getTripsStream(String userId) {
+    return _db
+        .collection('trips')
+        .where('userId', arrayContains: userId)
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs.map((doc) {
+      final dict = doc.data();
+      dict['tripId'] = doc.id;
+      return dict;
+    }).toList());
+  }
+
 }

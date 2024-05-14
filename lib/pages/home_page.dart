@@ -9,9 +9,10 @@ import 'trip_details.dart';
 
 class HomePage extends StatelessWidget {
   final void Function() logOut;
+  final FirebaseAuth authInstance;
   final FirestoreService _firestoreService = FirestoreService();
 
-  HomePage({super.key, required this.logOut});
+  HomePage(this.authInstance, {super.key, required this.logOut});
 
 
   Future<void> _showAvailabilityDialog(BuildContext context, String tripId) async {
@@ -24,7 +25,7 @@ class HomePage extends StatelessWidget {
     if (dateRange == null) return;
 
     final availability = Availability(
-      userId: FirebaseAuth.instance.currentUser!.uid,
+      userId: authInstance.currentUser!.uid,
       startDate: Timestamp.fromDate(dateRange.start),
       endDate: Timestamp.fromDate(dateRange.end),
     );
@@ -53,13 +54,13 @@ class HomePage extends StatelessWidget {
               if (result == 'Create Trip') {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const CreateTrip(),
+                    builder: (context) => CreateTrip(authInstance),
                   ),
                 );
               } else if (result == 'Join Trip') {
                 final result = await showDialog(
                   context: context,
-                  builder: (context) => JoinTripDialog(_firestoreService),
+                  builder: (context) => JoinTripDialog(_firestoreService, authInstance),
                 );
                 if (result != null && result != 'cancel') {
                   await _showAvailabilityDialog(context, result);
@@ -83,11 +84,10 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('trips')
-            .where('userId', arrayContains: FirebaseAuth.instance.currentUser!.uid)
-            .snapshots(),
+
+
+      body: StreamBuilder<List<Map<String,dynamic>>>(
+        stream: _firestoreService.getTripsStream(authInstance.currentUser!.uid),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
           }
 
           return ListView(
-            children: snapshot.data!.docs.map((doc) {
+            children: snapshot.data!.map((doc) {
               return Card(
                 child: ListTile(
                   title: Text(
@@ -111,14 +111,14 @@ class HomePage extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_sharp),
-                    onPressed: () => _firestoreService.deleteTrip(doc.id, FirebaseAuth.instance.currentUser!.uid),
+                    onPressed: () => _firestoreService.deleteTrip(doc['tripId'], authInstance.currentUser!.uid),
                   ),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => TripDetailsPage(
-                          tripId: doc.id,
+                          tripId: doc['tripId'],
                           tripName: doc['tripName'],
                           availability: List<Availability>.from(doc['availability'].map((e) => Availability(
                             userId: e['userID'],
