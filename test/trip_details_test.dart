@@ -32,8 +32,6 @@ void main() {
       when(authMock.login(any, any)).thenAnswer((_) async => "123");
       when(mockFirestore.getUserName(any))
           .thenAnswer((_) => Future.value('User 1'));
-      // when(mockavailbilities.getUserName('1')).thenAnswer((_) => Future.value('User 1'));
-      // when(mockavailbilities.getUserName('2')).thenAnswer((_) => Future.value('User 2'));;
       await tester.pumpWidget(MaterialApp(
         home: TripDetailsPage(
             tripId: "123",
@@ -42,6 +40,11 @@ void main() {
             locations: ['Seattle', 'Frankfurt'],
             db: mockFirestore),
       ));
+
+      await tester.tap(find.byIcon(Icons.ios_share));
+      await tester.pump();
+      await tester.tap(find.byIcon(Icons.ios_share));
+      await tester.pump();
 
       expect(find.text('test123'), findsOneWidget);
       expect(find.text('Location(s): Seattle, Frankfurt'), findsOneWidget);

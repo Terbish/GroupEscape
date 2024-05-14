@@ -7,8 +7,8 @@ import 'package:group_escape/models/trip_model.dart';
 import 'package:group_escape/util/availability.dart';
 
 void main() {
-  group('Create Trip Test', (){
-    testWidgets('CreateTrip widget renders correctly', (WidgetTester tester) async {
+  group('TripModel Test', (){
+    testWidgets('Testing the trip model and the toJson functions (including availability)', (WidgetTester tester) async {
 
       //setup
       final userIds = ['user1', 'user2'];
