@@ -33,7 +33,7 @@ void main() {
   }
 
   Future<void> homePage(WidgetTester tester) async {
-    expect(find.text('My Trip'), findsOne);
+    expect(find.text('My Trips'), findsOne);
   }
 
   group('HomePage Integration Tests', () {
