@@ -27,6 +27,9 @@ class TripDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double containerHeight = screenHeight * 0.3;
+
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -50,30 +53,71 @@ class TripDetailsPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Trip Name: $tripName'),
+            // Container(
+            //   padding: const EdgeInsets.all(10.0),
+            //   decoration: BoxDecoration(
+            //     color: Colors.blue[100],
+            //     borderRadius: BorderRadius.circular(10.0),
+            //   ),
+            //   child: Text('Trip Name: $tripName'),
+            // ),
             const SizedBox(height: 8.0),
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Colors.green[100],
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Column(
+                children: [
+                  Text('Member Availabilities:', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  for (var avail in availability)
+                    FutureBuilder<String>(
+                      future: db.getUserName(avail.userId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Text('Loading...'); // Display a loading indicator while waiting
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}'); // Display an error message if an error occurs
+                        } else {
+                          return Text('${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
+                        }
+                      },
+                    ),
+                ],
+              )
+            ),
             // Text('Start Date: $startDate'),
             // const SizedBox(height: 8.0),
             // Text('End Date: $endDate'),
             // const SizedBox(height: 8.0),
-            Text('Availability:'),
-            for (var avail in availability)
-            // Text('${getUserName(avail.userId)}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}'),
-              FutureBuilder<String>(
-                future: db.getUserName(avail.userId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text('Loading...'); // Display a loading indicator while waiting
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}'); // Display an error message if an error occurs
-                  } else {
-                    return Text('${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
-                  }
-                },
+            // Text('Availability:'),
+            // for (var avail in availability)
+            // // Text('${getUserName(avail.userId)}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}'),
+            //   FutureBuilder<String>(
+            //     future: db.getUserName(avail.userId),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.connectionState == ConnectionState.waiting) {
+            //         return Text('Loading...'); // Display a loading indicator while waiting
+            //       } else if (snapshot.hasError) {
+            //         return Text('Error: ${snapshot.error}'); // Display an error message if an error occurs
+            //       } else {
+            //         return Text('${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
+            //       }
+            //     },
+            //   ),
+            const SizedBox(height: 8.0),
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Colors.orange[100],
+                borderRadius: BorderRadius.circular(10.0),
               ),
-            Text('Location(s): ${locations.join(', ')}'),
+              child: Text('Location(s): ${locations.join(', ')}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+            ),
             const SizedBox(height: 16.0),
           ],
         ),
