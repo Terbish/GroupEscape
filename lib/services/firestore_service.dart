@@ -28,8 +28,24 @@ class FirestoreService {
       await _db.collection('trips').doc(tripId).update({
         'userId': FieldValue.arrayRemove([userId])
       });
+
+      List availability = await _db.collection('trips').doc(tripId).get().then((doc){
+        final data = doc.data() as Map<String, dynamic>;
+        return data['availability'];
+      });
+
+      Map<String, dynamic> userMap = availability.firstWhere(
+            (map) => map['userID'] == userId,
+            orElse: () => null,
+      );
+
+      await _db.collection('trips').doc(tripId).update({
+        'availability': FieldValue.arrayRemove([userMap])
+      });
     }
   }
+
+
 
   Future<bool> checkIfExists(String tripId) async {
     var doc = await _db.collection('trips').doc(tripId).get();
