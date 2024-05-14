@@ -40,6 +40,15 @@ void main() {
     await tester.tap(iconFinder);
   }
 
+  Future<void> createTrip(WidgetTester tester) async {
+    final Finder textFinder = find.text('Create Trip');
+    expect(textFinder, findsOneWidget);
+    await tester.tap(textFinder);
+    await tester.pumpAndSettle();
+    expect(find.text('Add Dates'), findsOne);
+    //...
+  }
+
   group('HomePage Integration Tests', () {
     testWidgets('Check if the HomePage widget is rendered', (WidgetTester tester) async {
       app.main();
@@ -50,6 +59,9 @@ void main() {
 
       await Future.delayed(const Duration(seconds: 2));
       await homePage(tester);
+
+      await Future.delayed(const Duration(seconds: 2));
+      await createTrip(tester);
 
     });
   });
