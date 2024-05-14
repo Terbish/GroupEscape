@@ -37,7 +37,7 @@ DA:60,0
 DA:62,0
 DA:64,0
 DA:65,0
-DA:69,0
+DA:69,2
 DA:80,1
 DA:82,1
 DA:86,1
@@ -71,7 +71,7 @@ DA:128,0
 DA:129,0
 DA:137,1
 LF:58
-LH:19
+LH:20
 end_of_record
 SF:lib\main.dart
 DA:7,1

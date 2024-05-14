@@ -34,6 +34,10 @@ void main() {
 
   Future<void> homePage(WidgetTester tester) async {
     expect(find.text('My Trips'), findsOne);
+
+    final Finder iconFinder = find.byIcon(Icons.add);
+    expect(iconFinder, findsOneWidget);
+    await tester.tap(iconFinder);
   }
 
   group('HomePage Integration Tests', () {
@@ -44,6 +48,7 @@ void main() {
       await signIn(tester);
       await tester.pumpAndSettle();
 
+      await Future.delayed(const Duration(seconds: 2));
       await homePage(tester);
 
     });
