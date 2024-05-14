@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:group_escape/pages/home_page.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: Colors.blue,
         )
       ),
-      home: const LoginScreen(),
+      home: LoginScreen(FirebaseAuth.instance),
     );
   }
 }

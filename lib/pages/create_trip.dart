@@ -7,7 +7,8 @@ import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
 
 class CreateTrip extends StatefulWidget {
-  const CreateTrip({super.key});
+  final FirebaseAuth authInstance;
+  const CreateTrip(this.authInstance, {super.key});
 
   @override
   _CreateTripState createState() => _CreateTripState();
@@ -41,10 +42,10 @@ class _CreateTripState extends State<CreateTrip> {
       _formKey.currentState!.save();
 
       // Get currently logged-in user's UID
-      List<String> userIds = [FirebaseAuth.instance.currentUser!.uid];
+      List<String> userIds = [widget.authInstance.currentUser!.uid];
 
       Availability availability = Availability(
-        userId: FirebaseAuth.instance.currentUser!.uid,
+        userId: widget.authInstance.currentUser!.uid,
         startDate: Timestamp.fromDate(_startDate),
         endDate: Timestamp.fromDate(_endDate),
       );

@@ -36,20 +36,20 @@ class FirebaseAuthentication {
     }
   }
 
-  Future<void> addTrip(String tripName, String startDate, String endDate, List<String> locations) async {
-    try {
-      String? userId = _firebaseAuth.currentUser?.uid;
-      if (userId != null) {
-        await _firestore.collection('trips').add({
-          'userId': userId,
-          'tripName': tripName,
-          'startDate': startDate,
-          'endDate': endDate,
-          'locations': locations,
-        });
-      }
-    } catch (e) {
-      print('Error adding trip: $e');
-    }
-  }
+  // Future<void> addTrip(String tripName, String startDate, String endDate, List<String> locations) async {
+  //   try {
+  //     String? userId = _firebaseAuth.currentUser?.uid;
+  //     if (userId != null) {
+  //       await _firestore.collection('trips').add({
+  //         'userId': userId,
+  //         'tripName': tripName,
+  //         'startDate': startDate,
+  //         'endDate': endDate,
+  //         'locations': locations,
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print('Error adding trip: $e');
+  //   }
+  // }
 }
