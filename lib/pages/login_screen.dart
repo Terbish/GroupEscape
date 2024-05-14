@@ -77,40 +77,54 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget userInput() {
     return Padding(
-        padding: const EdgeInsets.only(top: 128),
-        child: TextFormField(
-          controller: txtUserName,
-          keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-              hintText: 'Email', icon: Icon(Icons.verified_user)),
-          validator: (text) {
-            if (text!.isEmpty) {
-              return 'User Name is required';
-            } else if (!RegExp(
-                    r"^[a-zA-Z0-9.a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                .hasMatch(text)) {
-              return 'Please enter a valid email address';
-            }
-            return null;
-          },
-        ));
+      padding: const EdgeInsets.only(top: 128),
+      child: TextFormField(
+        controller: txtUserName,
+        keyboardType: TextInputType.emailAddress,
+        decoration: const InputDecoration(
+          hintText: 'Email',
+          icon: Icon(Icons.email),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        cursorColor: Colors.blue,
+        validator: (text) {
+          if (text!.isEmpty) {
+            return 'Email is required';
+          } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(text)) {
+            return 'Please enter a valid email address';
+          }
+          return null;
+        },
+      ),
+    );
   }
+
 
   Widget passwordInput() {
     return Padding(
-        padding: const EdgeInsets.only(top: 24),
-        child: TextFormField(
-          controller: txtPassword,
-          keyboardType: TextInputType.emailAddress,
-          obscureText: true,
-          decoration: const InputDecoration(
-              hintText: 'password', icon: Icon(Icons.enhanced_encryption)),
-          validator: (text) => text!.isEmpty ? 'Password is required' : null,
-        ));
+      padding: const EdgeInsets.only(top: 24),
+      child: TextFormField(
+        controller: txtPassword,
+        keyboardType: TextInputType.emailAddress,
+        obscureText: true,
+        decoration: const InputDecoration(
+          hintText: 'Password',
+          icon: Icon(Icons.lock),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+          ),
+        ),
+        cursorColor: Colors.blue,
+        validator: (text) => text!.isEmpty ? 'Password is required' : null,
+      ),
+    );
   }
 
+
   Widget btnMain() {
-    String btnText = _isLogin ? 'Log in' : 'Sign up';
+    String btnText = _isLogin ? 'Log in' : 'Sign Up';
     return Padding(
         padding: const EdgeInsets.only(top: 128),
         child: Container(
@@ -177,7 +191,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget btnSecondary() {
     String buttonText = _isLogin ? 'Sign up' : 'Log In';
     return TextButton(
-      child: Text(buttonText),
+      child: Text(
+        buttonText,
+        style: const TextStyle(
+          color: Colors.blue,
+        ),
+      ),
       onPressed: () {
         setState(() {
           _isLogin = !_isLogin;
@@ -185,6 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
+
 
   Widget txtMessage() {
     return Text(

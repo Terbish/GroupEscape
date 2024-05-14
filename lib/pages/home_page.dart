@@ -7,7 +7,6 @@ import 'create_trip.dart';
 import '/widgets/join_trip_dialog.dart';
 import 'trip_details.dart';
 
-
 class HomePage extends StatelessWidget {
   final void Function() logOut;
   final FirestoreService _firestoreService = FirestoreService();
@@ -15,51 +14,75 @@ class HomePage extends StatelessWidget {
   HomePage({super.key, required this.logOut});
 
 
+  Future<void> _showAvailabilityDialog(BuildContext context, String tripId) async {
+    final DateTimeRange? dateRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+
+    if (dateRange == null) return;
+
+    final availability = Availability(
+      userId: FirebaseAuth.instance.currentUser!.uid,
+      startDate: Timestamp.fromDate(dateRange.start),
+      endDate: Timestamp.fromDate(dateRange.end),
+    );
+
+    await _firestoreService.addAvailability(tripId, availability);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-              'My Trips',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 25,
-            ),
+      appBar: AppBar(
+        title: const Text(
+          'My Trips',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 25,
           ),
-          backgroundColor: Colors.blue,
-          actions: [
-            PopupMenuButton(
-              child: const Icon(Icons.add),
-              onSelected: (result) {
-                if (result == 'Create Trip') {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const CreateTrip(),
-                    ),);
-                } else if (result == 'Join Trip') {
-                  showDialog(
-                    context: context,
-                    builder: (context) => JoinTripDialog(_firestoreService),
-                  );
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem(
-                  value: 'Create Trip',
-                  child: Text('Create Trip', style: TextStyle(fontSize: 15)),
-                ),
-                const PopupMenuItem(
-                    value: 'Join Trip',
-                    child: Text('Join Trip', style: TextStyle(fontSize: 15)))
-              ],
-            ),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: logOut,
-            ),
-          ],
         ),
+        backgroundColor: Colors.blue,
+        actions: [
+          PopupMenuButton(
+            child: const Icon(Icons.add),
+            onSelected: (result) async {
+              if (result == 'Create Trip') {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CreateTrip(),
+                  ),
+                );
+              } else if (result == 'Join Trip') {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) => JoinTripDialog(_firestoreService),
+                );
+                if (result != null && result != 'cancel') {
+                  await _showAvailabilityDialog(context, result);
+                }
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem(
+                value: 'Create Trip',
+                child: Text('Create Trip', style: TextStyle(fontSize: 15)),
+              ),
+              const PopupMenuItem(
+                value: 'Join Trip',
+                child: Text('Join Trip', style: TextStyle(fontSize: 15)),
+              ),
+            ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: logOut,
+          ),
+        ],
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('trips')
@@ -71,15 +94,18 @@ class HomePage extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const CircularProgressIndicator(
+              color: Colors.blue,
+            );
           }
+
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Card(
                 child: ListTile(
                   title: Text(
                     doc['tripName'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
@@ -100,12 +126,13 @@ class HomePage extends StatelessWidget {
                             endDate: e['endDate'],
                           ))),
                           locations: List<String>.from(doc['locations']),
-                          db: _firestoreService
+                          db: _firestoreService,
+                          // members: [],
                         ),
                       ),
                     );
                   },
-                )
+                ),
               );
             }).toList(),
           );

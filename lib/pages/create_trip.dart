@@ -81,7 +81,7 @@ class _CreateTripState extends State<CreateTrip> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-            'Create Trip',
+          'Create Trip',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -91,14 +91,19 @@ class _CreateTripState extends State<CreateTrip> {
         backgroundColor: Colors.blue,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0), // Increased vertical padding
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Trip Name'),
+                decoration: const InputDecoration(
+                  labelText: 'Trip Name',
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a trip name';
@@ -110,7 +115,12 @@ class _CreateTripState extends State<CreateTrip> {
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Locations'),
+                decoration: const InputDecoration(
+                  labelText: 'Locations',
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter at least one location';
@@ -121,19 +131,49 @@ class _CreateTripState extends State<CreateTrip> {
                   _locations = value!.split(',');
                 },
               ),
-              ElevatedButton(
-                onPressed: () => _showDateRangePicker(context),
-                child: const Text('Select Date Range'),
+
+              const SizedBox(height: 24.0),
+
+              SizedBox(
+                width: double.infinity,
+                height: 48.0,
+                child: ElevatedButton(
+                  onPressed: () => _showDateRangePicker(context),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Add Dates',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
               ),
+
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Create Trip'),
+
+              SizedBox(
+                width: double.infinity,
+                height: 48.0,
+                child: ElevatedButton(
+                  onPressed: _submitForm,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Create Trip',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
+
     );
   }
 }

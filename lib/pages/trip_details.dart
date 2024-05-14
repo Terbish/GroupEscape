@@ -29,23 +29,23 @@ class TripDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+          title: Text(
             tripName,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 25,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 25,
+            ),
           ),
-        ),
-        backgroundColor: Colors.blue,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.ios_share),
-            onPressed:(){
-              Share.share('Check out this trip: $tripId');
-            }
-          )
-        ]
+          backgroundColor: Colors.blue,
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.ios_share),
+                onPressed:(){
+                  Share.share('Check out this trip: $tripId');
+                }
+            )
+          ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -60,7 +60,7 @@ class TripDetailsPage extends StatelessWidget {
             // const SizedBox(height: 8.0),
             Text('Availability:'),
             for (var avail in availability)
-              // Text('${getUserName(avail.userId)}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}'),
+            // Text('${getUserName(avail.userId)}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}'),
               FutureBuilder<String>(
                 future: db.getUserName(avail.userId),
                 builder: (context, snapshot) {
@@ -73,7 +73,7 @@ class TripDetailsPage extends StatelessWidget {
                   }
                 },
               ),
-              Text('Location(s): ${locations.join(', ')}'),
+            Text('Location(s): ${locations.join(', ')}'),
             const SizedBox(height: 16.0),
           ],
         ),
