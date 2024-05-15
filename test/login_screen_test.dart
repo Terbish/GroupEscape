@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:group_escape/pages/login_screen.dart';
 
+import 'create_trip_test.mocks.dart';
+
+
 main() {
   group('LoginScreen Validator Tests', () {
     testWidgets('User input validator test', (WidgetTester tester) async {
     // Build the LoginScreen widget
+      final MockFirebaseAuthentication firebaseInstance = MockFirebaseAuthentication();
       await tester.pumpWidget(
         MaterialApp( // Add MaterialApp widget
-          home: LoginScreen(),
+          home: LoginScreen(firebaseInstance),
         ),
       );
 
@@ -33,9 +37,10 @@ main() {
 
     testWidgets('Password input validator test', (WidgetTester tester) async {
       // Build the LoginScreen widget
+      final MockFirebaseAuthentication firebaseInstance = MockFirebaseAuthentication();
       await tester.pumpWidget(
         MaterialApp( // Add MaterialApp widget
-          home: LoginScreen(),
+          home: LoginScreen(firebaseInstance),
         ),
       );
 

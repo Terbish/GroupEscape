@@ -19,14 +19,6 @@ import 'trip_details_test.mocks.dart';
 @GenerateMocks([FirebaseAuthentication, FirestoreService])
 void main() {
   group('Create Trip Test', () {
-    // setUpAll(() async {
-    //   // Initialize Firebase app
-
-    //   await Firebase.initializeApp(
-    //     options: DefaultFirebaseOptions.currentPlatform,
-    //   );
-    // });
-
     testWidgets('CreateTrip widget renders correctly',
         (WidgetTester tester) async {
 
@@ -42,18 +34,22 @@ void main() {
         ),
       );
 
-      // expect(find.byType(AppBar), findsOneWidget);
-      // expect(
-      //     find.descendant(
-      //         of: find.byType(AppBar), matching: find.text('Create Trip')),
-      //     findsOneWidget);
-      // expect(find.byType(TextFormField), findsNWidgets(4));
-      // expect(find.byType(ElevatedButton), findsOneWidget);
-      // expect(
-      //     find.descendant(
-      //         of: find.byType(ElevatedButton),
-      //         matching: find.text('Create Trip')),
-      //     findsOneWidget);
+      expect(find.byType(AppBar), findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(AppBar), matching: find.text('Create Trip')),
+          findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(
+          find.descendant(
+              of: find.byType(ElevatedButton),
+              matching: find.text('Add Dates')),
+          findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(ElevatedButton),
+              matching: find.text('Create Trip')),
+          findsOneWidget);
     });
 
   });

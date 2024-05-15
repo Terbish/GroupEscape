@@ -11,9 +11,10 @@ import 'trip_details.dart';
 class HomePage extends StatelessWidget {
   final void Function() logOut;
   final FirebaseAuthentication authInstance;
-  final FirestoreService _firestoreService = FirestoreService();
+  final FirestoreService _firestoreService;
 
-  HomePage(this.authInstance, {super.key, required this.logOut});
+  HomePage(this.authInstance, {super.key, required this.logOut, FirestoreService? fS}):
+        _firestoreService = fS ?? FirestoreService();
 
 
   Future<void> _showAvailabilityDialog(BuildContext context, String tripId) async {
