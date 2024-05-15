@@ -4,8 +4,14 @@ import 'dart:async';
 
 
 class FirebaseAuthentication {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
+
+  String currentUser(){
+    return _firebaseAuth.currentUser!.uid;
+  }
+
+  FirebaseAuthentication(this._firebaseAuth, this._firestore);
 
   Future<String?> createUser(String email, String password) async {
     try {

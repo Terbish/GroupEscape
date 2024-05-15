@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/services/firestore_service.dart';
+import 'package:group_escape/shared/firebase_authentication.dart';
 import '../util/availability.dart';
 import 'create_trip.dart';
 import '/widgets/join_trip_dialog.dart';
@@ -9,10 +10,11 @@ import 'trip_details.dart';
 
 class HomePage extends StatelessWidget {
   final void Function() logOut;
-  final FirebaseAuth authInstance;
-  final FirestoreService _firestoreService = FirestoreService();
+  final FirebaseAuthentication authInstance;
+  final FirestoreService _firestoreService;
 
-  HomePage(this.authInstance, {super.key, required this.logOut});
+  HomePage(this.authInstance, {super.key, required this.logOut, FirestoreService? fS}):
+        _firestoreService = fS ?? FirestoreService();
 
 
   Future<void> _showAvailabilityDialog(BuildContext context, String tripId) async {
@@ -25,7 +27,7 @@ class HomePage extends StatelessWidget {
     if (dateRange == null) return;
 
     final availability = Availability(
-      userId: authInstance.currentUser!.uid,
+      userId: authInstance.currentUser(),
       startDate: Timestamp.fromDate(dateRange.start),
       endDate: Timestamp.fromDate(dateRange.end),
     );
@@ -87,7 +89,7 @@ class HomePage extends StatelessWidget {
 
 
       body: StreamBuilder<List<Map<String,dynamic>>>(
-        stream: _firestoreService.getTripsStream(authInstance.currentUser!.uid),
+        stream: _firestoreService.getTripsStream(authInstance.currentUser()),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -111,7 +113,7 @@ class HomePage extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_sharp),
-                    onPressed: () => _firestoreService.deleteTrip(doc['tripId'], authInstance.currentUser!.uid),
+                    onPressed: () => _firestoreService.deleteTrip(doc['tripId'], authInstance.currentUser()),
                   ),
                   onTap: () {
                     Navigator.push(

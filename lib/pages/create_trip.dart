@@ -1,21 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:group_escape/util/availability.dart';
 
 import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
 
 class CreateTrip extends StatefulWidget {
-  final FirebaseAuth authInstance;
-  const CreateTrip(this.authInstance, {super.key});
+  final FirebaseAuthentication authInstance;
+  final FirestoreService firestoreService;
+  CreateTrip(this.authInstance, {super.key, FirestoreService? fS}):
+      firestoreService = fS ?? FirestoreService();
+
 
   @override
   _CreateTripState createState() => _CreateTripState();
 }
 class _CreateTripState extends State<CreateTrip> {
   final _formKey = GlobalKey<FormState>();
-  final _firestoreService = FirestoreService();
+
   String _tripName = '';
   // String _startDate = '';
   // String _endDate = '';
@@ -42,10 +46,10 @@ class _CreateTripState extends State<CreateTrip> {
       _formKey.currentState!.save();
 
       // Get currently logged-in user's UID
-      List<String> userIds = [widget.authInstance.currentUser!.uid];
+      List<String> userIds = [widget.authInstance.currentUser()];
 
       Availability availability = Availability(
-        userId: widget.authInstance.currentUser!.uid,
+        userId: widget.authInstance.currentUser(),
         startDate: Timestamp.fromDate(_startDate),
         endDate: Timestamp.fromDate(_endDate),
       );
@@ -60,7 +64,7 @@ class _CreateTripState extends State<CreateTrip> {
         availability: [availability],
       );
 
-      String tripId = await _firestoreService.addTrip(tripModel);
+      String tripId = await widget.firestoreService.addTrip(tripModel);
 
 
 

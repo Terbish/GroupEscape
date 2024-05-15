@@ -42,6 +42,8 @@ dependencies:
   cloud_firestore: ^4.17.2
   intl:
   share:
+  firebase_auth_mocks: ^0.13.0
+  fake_cloud_firestore: ^2.5.1
 
 dev_dependencies:
   mockito:

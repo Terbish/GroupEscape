@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:group_escape/pages/home_page.dart';
 import 'package:group_escape/pages/login_screen.dart';
+import 'package:group_escape/shared/firebase_authentication.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -55,8 +57,8 @@ class MyApp extends StatelessWidget {
         )
       ),
       home: FirebaseAuth.instance.currentUser!=null
-        ? HomePage(FirebaseAuth.instance, logOut: (){FirebaseAuth.instance.signOut();}) :
-      LoginScreen(FirebaseAuth.instance),
+        ? HomePage(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance), logOut: (){FirebaseAuth.instance.signOut();}) :
+      LoginScreen(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance))
     );
   }
 }
