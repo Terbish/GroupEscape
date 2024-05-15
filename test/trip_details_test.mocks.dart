@@ -122,6 +122,16 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
           ),
         )),
       ) as _i3.Future<String>);
+
+  @override
+  _i3.Stream<List<Map<String, dynamic>>> getTripsStream(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getTripsStream,
+          [userId],
+        ),
+        returnValue: _i3.Stream<List<Map<String, dynamic>>>.empty(),
+      ) as _i3.Stream<List<Map<String, dynamic>>>);
 }
 
 /// A class which mocks [FirebaseAuthentication].
@@ -132,6 +142,21 @@ class MockFirebaseAuthentication extends _i1.Mock
   MockFirebaseAuthentication() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  String currentUser() => (super.noSuchMethod(
+        Invocation.method(
+          #currentUser,
+          [],
+        ),
+        returnValue: _i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #currentUser,
+            [],
+          ),
+        ),
+      ) as String);
 
   @override
   _i3.Future<String?> createUser(
@@ -173,25 +198,4 @@ class MockFirebaseAuthentication extends _i1.Mock
         ),
         returnValue: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
-
-  @override
-  _i3.Future<void> addTrip(
-    String? tripName,
-    String? startDate,
-    String? endDate,
-    List<String>? locations,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #addTrip,
-          [
-            tripName,
-            startDate,
-            endDate,
-            locations,
-          ],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
 }

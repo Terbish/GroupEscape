@@ -5,6 +5,7 @@ import 'package:group_escape/util/availability.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+
   Future<String> addTrip(TripModel trip) async {
     DocumentReference docRef = await _db.collection('trips').add(trip.toJson());
     return docRef.id;

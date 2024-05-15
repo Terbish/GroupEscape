@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/util/availability.dart';
 
+import '../shared/firebase_authentication.dart';
+
 class JoinTripDialog extends StatelessWidget {
   final firestoreService;
-  final FirebaseAuth authInstance;
+  final FirebaseAuthentication authInstance;
   JoinTripDialog(this.firestoreService, this.authInstance, {super.key});
 
   final _controller = TextEditingController();
@@ -16,7 +18,7 @@ class JoinTripDialog extends StatelessWidget {
       );
     } else {
       await firestoreService.addUserToTrip(
-          _controller.text, authInstance.currentUser!.uid);
+          _controller.text, authInstance.currentUser());
       Navigator.pop(context, _controller.text);
     }
   }

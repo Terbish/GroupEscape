@@ -6,9 +6,8 @@ import 'package:group_escape/pages/home_page.dart';
 import '../shared/firebase_authentication.dart';
 
 class LoginScreen extends StatefulWidget {
-  final FirebaseAuth authInstance;
-
-  const LoginScreen(this.authInstance, {super.key});
+  final FirebaseAuthentication auth;
+  const LoginScreen(this.auth, {super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -18,23 +17,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loggedIn = false;
 
-  late FirebaseAuthentication auth;
   String _message = '';
   bool _isLogin = true;
   final TextEditingController txtUserName = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
 
-  @override
-  void initState() {
-    // Firebase.initializeApp().whenComplete(() {
-    auth = FirebaseAuthentication();
-    setState(() {});
-    // });
-    super.initState();
-  }
 
   void _logOut() {
-    auth.logout().then((value) {
+    widget.auth.logout().then((value) {
       if (value) {
         setState(() {
           _message = 'User Logged Out';
@@ -49,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return loggedIn
-        ? HomePage(widget.authInstance, logOut: _logOut)
+        ? HomePage(widget.auth, logOut: _logOut)
         : Scaffold(
             appBar: AppBar(
               title: const Text(
@@ -147,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 if (_formKey.currentState?.validate() ?? false) {
                   if (_isLogin) {
-                    auth
+                    widget.auth
                         .login(txtUserName.text, txtPassword.text)
                         .then((value) async {
                       if (value == null) {
@@ -163,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     });
                   } else {
-                    auth
+                    widget.auth
                         .createUser(txtUserName.text, txtPassword.text)
                         .then((value) async {
                       if (value == null) {
