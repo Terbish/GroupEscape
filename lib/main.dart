@@ -56,8 +56,9 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: Colors.blue,
         )
       ),
-      home: LoginScreen(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance))
-
+      home: FirebaseAuth.instance.currentUser!=null
+        ? HomePage(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance), logOut: (){FirebaseAuth.instance.signOut();}) :
+      LoginScreen(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance))
     );
   }
 }
