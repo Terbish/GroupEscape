@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:group_escape/services/firestore_service.dart';
 import 'package:group_escape/util/availability.dart';
 
 import '../shared/firebase_authentication.dart';
 
 class JoinTripDialog extends StatelessWidget {
-  final firestoreService;
+  final FirestoreService firestoreService;
   final FirebaseAuthentication authInstance;
   JoinTripDialog(this.firestoreService, this.authInstance, {super.key});
 
@@ -23,14 +24,14 @@ class JoinTripDialog extends StatelessWidget {
     }
   }
 
-  String? nonEmptyValidator(String? value, context) {
-    if (value == null || value.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid ID')),
-      );
-    }
-    return null;
-  }
+  // String? nonEmptyValidator(String? value, context) {
+  //   if (value == null || value.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Invalid ID')),
+  //     );
+  //   }
+  //   return null;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,8 @@ class JoinTripDialog extends StatelessWidget {
       title: const Text('Join Trip'),
       content: TextFormField(
         controller: _controller,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (text) => text!.isEmpty ? 'Password is required' : null,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (text) => text!.isEmpty ? 'ID is required' : null,
         decoration: const InputDecoration(
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),

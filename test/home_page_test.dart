@@ -129,7 +129,7 @@ main() {
       when(firebaseInstance.currentUser()).thenReturn("123");
 
       when(fS.getUserName(any)).thenAnswer((_){
-        return Future.value(('UserName'));
+        return Future.value('UserName');
       });
 
       when(fS.getTripsStream(any)).thenAnswer((_) {
