@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:group_escape/util/availability.dart';
+import 'package:intl/intl.dart';
 
 import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
@@ -26,6 +27,7 @@ class _CreateTripState extends State<CreateTrip> {
   List<String> _locations = [];
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
+  bool selectedTime = false;
 
   void _showDateRangePicker(BuildContext context) async{
     final DateTimeRange? picked = await showDateRangePicker(
@@ -37,6 +39,7 @@ class _CreateTripState extends State<CreateTrip> {
       setState(() {
         _startDate = picked.start;
         _endDate = picked.end;
+        selectedTime = true;
       });
     }
   }
@@ -157,6 +160,14 @@ class _CreateTripState extends State<CreateTrip> {
               ),
 
               const SizedBox(height: 16.0),
+
+              if (selectedTime)
+                Text(
+                  'Selected Dates:\n${DateFormat('MM/dd/yyyy').format(_startDate!)} to ${DateFormat('MM/dd/yyyy').format(_endDate!)}',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+              const SizedBox(height: 16.0),
+
 
               SizedBox(
                 width: double.infinity,
