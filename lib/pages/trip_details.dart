@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
@@ -10,8 +11,10 @@ class TripDetailsPage extends StatelessWidget {
   final List<Availability> availability;
   final List<String> locations;
   final db;
+  Timestamp? rangeStart;
+  Timestamp? rangeEnd;
 
-  const TripDetailsPage({
+  TripDetailsPage({
     super.key,
     required this.tripId,
     required this.tripName,
@@ -20,9 +23,37 @@ class TripDetailsPage extends StatelessWidget {
     required this.db
   });
 
-  // getUserName (String userId) async {
-  //   return await db.getUserName(userId);
-  // }
+  bool calculateRange(List<Availability> avails){
+    for (int i = 0; i < avails.length; i++) {
+      Availability avail = avails[i];
+      if (rangeStart == null && rangeEnd == null){
+        rangeStart = avail.startDate;
+        rangeEnd = avail.endDate;
+      } else {
+        int startComparison = rangeStart!.compareTo(avail.startDate);
+        int endComparison =  rangeEnd!.compareTo(avail.endDate);
+
+        int newEndBeforeStart = rangeStart!.compareTo(avail.endDate);
+        int newStartAfterEnd =  rangeEnd!.compareTo(avail.startDate);
+
+        if (newEndBeforeStart > 0 || newStartAfterEnd < 0 ){
+          return false;
+        }
+
+        if (startComparison <= 0){
+          rangeStart = avail.startDate;
+        }
+        if (endComparison >= 0){
+          rangeEnd = avail.endDate;
+        }
+
+      }
+    }
+    return true;
+  }
+
+
+
 
 
   @override
@@ -86,6 +117,15 @@ class TripDetailsPage extends StatelessWidget {
                         }
                       },
                     ),
+                  calculateRange(availability)
+                    ? Text(
+                      "\nAvailable Time-range:\n${DateFormat('MM/dd/yyyy').format(rangeStart!.toDate())} to ${DateFormat('MM/dd/yyyy').format(rangeEnd!.toDate())}",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )
+                    : Text(
+                      "\nNo overlap in availabilities",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )
                 ],
               )
             ),
@@ -124,4 +164,6 @@ class TripDetailsPage extends StatelessWidget {
       ),
     );
   }
+
 }
+
