@@ -1,16 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:group_escape/firebase_options.dart';
 import 'package:group_escape/pages/create_trip.dart';
-import 'package:group_escape/pages/login_screen.dart';
 import 'package:group_escape/services/firestore_service.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:mockito/annotations.dart';
-
-import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:mockito/mockito.dart';
 
 import 'trip_details_test.mocks.dart';
