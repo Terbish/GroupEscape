@@ -64,15 +64,6 @@ class FirestoreService {
     });
   }
 
-  // Future<List<Map<String, dynamic>>> getTrips(String userId) async {
-  //   final userTripsSnapshot = await _db.collection('trips').where('userId', arrayContains: userId).get();
-  //   final List<Map<String, dynamic>> userTrips = userTripsSnapshot.docs.map((doc) {
-  //     final dict =  doc.data();
-  //     dict['tripId'] = doc.id;
-  //     return dict;
-  //   }).toList();
-  //   return userTrips;
-  // }
 
   Stream<List<Map<String, dynamic>>> getTripsStream(String userId) {
     return _db
@@ -85,5 +76,4 @@ class FirestoreService {
       return dict;
     }).toList());
   }
-
 }
