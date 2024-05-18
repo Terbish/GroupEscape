@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  async: ^2.8.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +45,7 @@ dependencies:
   share:
   firebase_auth_mocks: ^0.13.0
   fake_cloud_firestore: ^2.5.1
+  mock_exceptions: ^0.8.2
 
 dev_dependencies:
   mockito:
