@@ -3,8 +3,10 @@ import 'package:group_escape/models/trip_model.dart';
 import 'package:group_escape/util/availability.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db;
 
+  FirestoreService({FirebaseFirestore? fS}):
+        _db = fS ?? FirebaseFirestore.instance;
 
   Future<String> addTrip(TripModel trip) async {
     DocumentReference docRef = await _db.collection('trips').add(trip.toJson());
