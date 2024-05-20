@@ -146,6 +146,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       } else {
                         final userId = value;
+                        // final userDoc = FirebaseFirestore.instance
+                        //     .collection('users')
+                        //     .doc(userId);
+                        // await userDoc.update({
+                        //   'tokens': FieldValue.arrayUnion([widget.token]),
+                        // });
                         setState(() {
                           _message = 'User $userId successfully logged in';
                           loggedIn = true;
@@ -168,6 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         await userDoc.set({
                           'email': txtUserName.text,
                           'name': txtUserName.text.split('@')[0],
+                          // 'tokens': [widget.token],
                         });
                         setState(() {
                           _message = 'User $userId successfully signed in';

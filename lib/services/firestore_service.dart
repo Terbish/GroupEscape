@@ -1,12 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:group_escape/models/trip_model.dart';
 import 'package:group_escape/util/availability.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db;
+  FirebaseMessaging? _messaging = null;
 
-  FirestoreService({FirebaseFirestore? fS}):
-        _db = fS ?? FirebaseFirestore.instance;
+
+  FirestoreService({FirebaseFirestore? fS, FirebaseMessaging? fM}):
+        _db = fS ?? FirebaseFirestore.instance,
+        _messaging = fM ?? FirebaseMessaging.instance;
+
+  Future<void> subscribeToTopic (tripId) async {
+    // _messaging = _messaging ?? FirebaseMessaging.instance;
+    await _messaging!.subscribeToTopic(tripId);
+  }
 
   Future<String> addTrip(TripModel trip) async {
     DocumentReference docRef = await _db.collection('trips').add(trip.toJson());
@@ -20,6 +29,7 @@ class FirestoreService {
   }
 
   Future<void> deleteTrip(String tripId, String userId) async{
+    // _messaging = _messaging ?? FirebaseMessaging.instance;
     final emptyTrip = await _db.collection('trips').doc(tripId).get().then((doc){
       final data = doc.data() as Map<String, dynamic>;
       return data['userId'].length ==  1;

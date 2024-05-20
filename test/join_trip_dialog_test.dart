@@ -1,12 +1,22 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:group_escape/widgets/join_trip_dialog.dart';
 
 import 'package:mockito/mockito.dart';
+import 'mock.dart';
 import 'trip_details_test.mocks.dart';
-
+import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart';
 
 void main() {
+
+  setupFirebaseMessagingMocks();
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+    FirebaseMessagingPlatform.instance = kMockMessagingPlatform;
+  });
+
   group('Create Trip Test', () {
     final MockFirebaseAuthentication firebaseInstance = MockFirebaseAuthentication();
     final MockFirestoreService fS = MockFirestoreService();
@@ -42,8 +52,7 @@ void main() {
             home: JoinTripDialog(fS, firebaseInstance),
           )
       );
-      // when(fS.checkIfExists(any)).thenAnswer((_){ return Future.value(true);});
-      // when(fS.addUserToTrip(any, any)).thenAnswer((_) async {});
+
 
 
 
@@ -98,3 +107,4 @@ void main() {
     });
   });
 }
+

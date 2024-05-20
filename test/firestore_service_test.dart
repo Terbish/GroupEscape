@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:group_escape/models/trip_model.dart';
 import 'package:group_escape/services/firestore_service.dart';
@@ -8,8 +10,20 @@ import 'package:async/async.dart';
 
 
 
+import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart';
+
+import 'mock.dart';
+
 void main() {
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+    FirebaseMessagingPlatform.instance = kMockMessagingPlatform;
+    final messaging = FirebaseMessaging.instance;
+  });
+
   group('firebase Authentication', () {
+
     testWidgets('Add trip test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
       FirestoreService fS = FirestoreService(fS: firestore);
