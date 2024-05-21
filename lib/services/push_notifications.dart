@@ -20,10 +20,11 @@ class PushNotifications {
     final token = await _firebaseMessaging.getToken();
   }
 
-  static Future<bool> sendNotification ({required String topic}) async {
-    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('sendNotification');
+  Future<bool> sendNotification ({required String topic}) async {
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+        'sendNotification');
 
-    final response = await callable.call( <String, dynamic> {
+    final response = await callable.call(<String, dynamic>{
       'topic': topic,
     });
 
@@ -32,6 +33,5 @@ class PushNotifications {
       return false;
     }
     return true;
-}
-
+  }
 }

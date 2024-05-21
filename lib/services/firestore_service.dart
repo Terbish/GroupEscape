@@ -1,21 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:group_escape/models/trip_model.dart';
+import 'package:group_escape/services/push_notifications.dart';
 import 'package:group_escape/util/availability.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db;
-  FirebaseMessaging? _messaging = null;
+  FirebaseMessaging? _messaging;
+  PushNotifications? _pushNotifications;
 
 
-  FirestoreService({FirebaseFirestore? fS, FirebaseMessaging? fM}):
+  FirestoreService({FirebaseFirestore? fS, FirebaseMessaging? fM, PushNotifications? pN}):
         _db = fS ?? FirebaseFirestore.instance,
-        _messaging = fM ?? FirebaseMessaging.instance;
+        _messaging = fM ?? FirebaseMessaging.instance,
+        _pushNotifications = pN ?? PushNotifications();
 
   Future<void> subscribeToTopic (tripId) async {
     // _messaging = _messaging ?? FirebaseMessaging.instance;
     await _messaging!.subscribeToTopic(tripId);
   }
+
+
+  Future<bool> sendNotification ({required String topic}) async {
+    return await _pushNotifications!.sendNotification(topic: topic);
+  }
+
+  // Future<bool> sendNotification ({required String topic}) async {
+  //   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+  //       'sendNotification');
+  //
+  //   final response = await callable.call(<String, dynamic>{
+  //     'topic': topic,
+  //   });
+  //
+  //   print('result is ${response.data ?? 'No data came back'}');
+  //   if (response.data == null) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   Future<String> addTrip(TripModel trip) async {
     DocumentReference docRef = await _db.collection('trips').add(trip.toJson());

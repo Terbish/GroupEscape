@@ -5,28 +5,34 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:group_escape/models/trip_model.dart';
 import 'package:group_escape/services/firestore_service.dart';
+import 'package:group_escape/services/push_notifications.dart';
 import 'package:group_escape/util/availability.dart';
 import 'package:async/async.dart';
 
 
 
 import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart';
+import 'package:mockito/annotations.dart';
 
+import 'firestore_service_test.mocks.dart';
 import 'mock.dart';
 
+@GenerateMocks([PushNotifications])
 void main() {
+
+  setupFirebaseMessagingMocks();
 
   setUpAll(() async {
     await Firebase.initializeApp();
     FirebaseMessagingPlatform.instance = kMockMessagingPlatform;
-    final messaging = FirebaseMessaging.instance;
   });
 
   group('firebase Authentication', () {
 
     testWidgets('Add trip test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP = TripModel(
           userIds: ['1','2'],
@@ -43,7 +49,8 @@ void main() {
 
     testWidgets('Add Availability test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP = TripModel(
           userIds: ['1','2'],
@@ -62,7 +69,8 @@ void main() {
 
     testWidgets('Add Availability test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP = TripModel(
           userIds: ['1','2'],
@@ -81,7 +89,8 @@ void main() {
 
     testWidgets('Check if exists test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP = TripModel(
           userIds: ['1','2'],
@@ -99,7 +108,8 @@ void main() {
 
     testWidgets('delete trip test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP = TripModel(
           userIds: ['1','2'],
@@ -123,7 +133,8 @@ void main() {
 
     testWidgets('add user to trip test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP = TripModel(
           userIds: ['1'],
@@ -147,8 +158,9 @@ void main() {
 
     testWidgets('get user name test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
+      MockPushNotifications pN = MockPushNotifications();
       DocumentReference doc = await firestore.collection('users').add({'name': 'username'});
-      FirestoreService fS = FirestoreService(fS: firestore);
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
       
       String name = await fS.getUserName(doc.id);
       expect(name, 'username');
@@ -157,7 +169,8 @@ void main() {
 
     testWidgets('get trips stream test', (WidgetTester tester) async {
       final firestore = FakeFirebaseFirestore();
-      FirestoreService fS = FirestoreService(fS: firestore);
+      MockPushNotifications pN = MockPushNotifications();
+      FirestoreService fS = FirestoreService(fS: firestore, pN: pN);
 
       TripModel tP1 = TripModel(
           userIds: ['1', '2'],
