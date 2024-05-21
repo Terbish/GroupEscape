@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
         )
       ),
       home: FirebaseAuth.instance.currentUser!=null
-        ? HomePage(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance), logOut: (){FirebaseAuth.instance.signOut();}) :
-      LoginScreen(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance))
+        ? LoginScreen(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance), true ) :
+      LoginScreen(FirebaseAuthentication(FirebaseAuth.instance, FirebaseFirestore.instance), false)
     );
   }
 }

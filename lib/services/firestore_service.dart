@@ -53,7 +53,7 @@ class FirestoreService {
   }
 
   Future<void> deleteTrip(String tripId, String userId) async{
-    // _messaging = _messaging ?? FirebaseMessaging.instance;
+    _messaging!.unsubscribeFromTopic(tripId);
     final emptyTrip = await _db.collection('trips').doc(tripId).get().then((doc){
       final data = doc.data() as Map<String, dynamic>;
       return data['userId'].length ==  1;
