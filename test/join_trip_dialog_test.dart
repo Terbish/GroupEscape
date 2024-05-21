@@ -73,6 +73,8 @@ void main() {
       when(fS.sendNotification(topic: 'xyz')).thenAnswer((_){
         return Future.value(true);
       });
+      when(fS.subscribeToTopic(any)).thenAnswer((_) async {});
+
 
       await tester.pumpWidget(
           MaterialApp(
