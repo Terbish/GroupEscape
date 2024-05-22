@@ -7,7 +7,8 @@ import '../shared/firebase_authentication.dart';
 
 class LoginScreen extends StatefulWidget {
   final FirebaseAuthentication auth;
-  const LoginScreen(this.auth, {super.key});
+  LoginScreen(this.auth, this.loggedIn, {super.key});
+  bool loggedIn;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -15,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool loggedIn = false;
+  // bool loggedIn = false;
 
   String _message = '';
   bool _isLogin = true;
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value) {
         setState(() {
           _message = 'User Logged Out';
-          loggedIn = false;
+          widget.loggedIn = false;
         });
       } else {
         _message = 'Unable to Log Out';
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return loggedIn
+    return widget.loggedIn
         ? HomePage(widget.auth, logOut: _logOut)
         : Scaffold(
             appBar: AppBar(
@@ -146,9 +147,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       } else {
                         final userId = value;
+                        // final userDoc = FirebaseFirestore.instance
+                        //     .collection('users')
+                        //     .doc(userId);
+                        // await userDoc.update({
+                        //   'tokens': FieldValue.arrayUnion([widget.token]),
+                        // });
                         setState(() {
                           _message = 'User $userId successfully logged in';
-                          loggedIn = true;
+                          widget.loggedIn = true;
                         });
                       }
                     });
@@ -168,10 +175,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         await userDoc.set({
                           'email': txtUserName.text,
                           'name': txtUserName.text.split('@')[0],
+                          // 'tokens': [widget.token],
                         });
                         setState(() {
                           _message = 'User $userId successfully signed in';
-                          loggedIn = true;
+                          widget.loggedIn = true;
                         });
                       }
                     });

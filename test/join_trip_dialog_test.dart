@@ -1,14 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:group_escape/widgets/join_trip_dialog.dart';
 
 import 'package:mockito/mockito.dart';
+import 'firestore_service_test.mocks.dart';
+import 'mock.dart';
 import 'trip_details_test.mocks.dart';
-
+import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart';
 
 void main() {
+
+  setupFirebaseMessagingMocks();
+
+  setUpAll(() async {
+    await Firebase.initializeApp();
+    FirebaseMessagingPlatform.instance = kMockMessagingPlatform;
+  });
+
   group('Create Trip Test', () {
     final MockFirebaseAuthentication firebaseInstance = MockFirebaseAuthentication();
+    MockPushNotifications pN = MockPushNotifications();
     final MockFirestoreService fS = MockFirestoreService();
 
     testWidgets('JoinTripDialog widget rendering test ', (WidgetTester tester) async {
@@ -42,8 +54,7 @@ void main() {
             home: JoinTripDialog(fS, firebaseInstance),
           )
       );
-      // when(fS.checkIfExists(any)).thenAnswer((_){ return Future.value(true);});
-      // when(fS.addUserToTrip(any, any)).thenAnswer((_) async {});
+
 
 
 
@@ -58,6 +69,13 @@ void main() {
     });
 
     testWidgets('Test Join Button successful', (WidgetTester tester) async {
+
+      when(fS.sendNotification(topic: 'xyz')).thenAnswer((_){
+        return Future.value(true);
+      });
+      when(fS.subscribeToTopic(any)).thenAnswer((_) async {});
+
+
       await tester.pumpWidget(
           MaterialApp(
             home: JoinTripDialog(fS, firebaseInstance),
@@ -98,3 +116,4 @@ void main() {
     });
   });
 }
+

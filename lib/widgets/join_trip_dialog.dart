@@ -20,6 +20,8 @@ class JoinTripDialog extends StatelessWidget {
     } else {
       await firestoreService.addUserToTrip(
           _controller.text, authInstance.currentUser());
+      await firestoreService.sendNotification(topic: _controller.text);
+      await firestoreService.subscribeToTopic(_controller.text);
       Navigator.pop(context, _controller.text);
     }
   }

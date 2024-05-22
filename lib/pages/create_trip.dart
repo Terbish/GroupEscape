@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:group_escape/util/availability.dart';
@@ -68,17 +69,8 @@ class _CreateTripState extends State<CreateTrip> {
       );
 
       String tripId = await widget.firestoreService.addTrip(tripModel);
+      await widget.firestoreService.subscribeToTopic(tripId);
 
-
-
-      // AvailabilityModel availabilityModel = AvailabilityModel(
-      //   userId: userId,
-      //   tripId: tripId,
-      //   availability: [availability],
-      // );
-
-      // await _firestoreService.addAvailability(tripId, userId, [availability] as Map<String, dynamic>);
-      // Navigate back to the home page
       Navigator.pop(context);
     }
   }

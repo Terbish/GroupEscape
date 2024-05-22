@@ -12,7 +12,7 @@ main() {
       final MockFirebaseAuthentication firebaseInstance = MockFirebaseAuthentication();
       await tester.pumpWidget(
         MaterialApp( // Add MaterialApp widget
-          home: LoginScreen(firebaseInstance),
+          home: LoginScreen(firebaseInstance, false),
         ),
       );
 
@@ -40,7 +40,7 @@ main() {
       final MockFirebaseAuthentication firebaseInstance = MockFirebaseAuthentication();
       await tester.pumpWidget(
         MaterialApp( // Add MaterialApp widget
-          home: LoginScreen(firebaseInstance),
+          home: LoginScreen(firebaseInstance, false),
         ),
       );
 
