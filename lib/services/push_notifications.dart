@@ -27,8 +27,10 @@ class PushNotifications {
     final response = await callable.call(<String, dynamic>{
       'topic': topic,
     });
+    print('\n\n\n$topic\n\n\n');
+    print('\n\n\n${await _firebaseMessaging.getToken()}\n\n\n');
 
-    print('result is ${response.data ?? 'No data came back'}');
+    print('\n\n\nresult is ${response.data ?? 'No data came back'}');
     if (response.data == null) {
       return false;
     }
