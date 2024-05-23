@@ -122,7 +122,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
               ),
               child: Column(
                 children: [
-                  Text('Member Availabilities:',
+                   Text('Member Availabilities:',
                       style:
                       TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   for (var avail in widget.availability)
@@ -132,10 +132,10 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Text(
-                              'Loading...'); // Display a loading indicator while waiting
+                              'Loading...');
                         } else if (snapshot.hasError) {
                           return Text(
-                              'Error: ${snapshot.error}'); // Display an error message if an error occurs
+                              'Error: ${snapshot.error}');
                         } else {
                           return Text(
                               '${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
