@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
       ),
 
 
-      body: StreamBuilder<List<Map<String,dynamic>>>(
+      body: StreamBuilder<List<Map<String, dynamic>>>(
         stream: _firestoreService.getTripsStream(authInstance.currentUser()),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -103,6 +103,7 @@ class HomePage extends StatelessWidget {
 
           return ListView(
             children: snapshot.data!.map((doc) {
+              final isCreator = doc['userId'][0] == authInstance.currentUser();
               return Card(
                 child: ListTile(
                   title: Text(
@@ -113,7 +114,8 @@ class HomePage extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_sharp),
-                    onPressed: () => _firestoreService.deleteTrip(doc['tripId'], authInstance.currentUser()),
+                    onPressed: () => _firestoreService.deleteTrip(
+                        doc['tripId'], authInstance.currentUser()),
                   ),
                   onTap: () {
                     Navigator.push(
@@ -122,14 +124,15 @@ class HomePage extends StatelessWidget {
                         builder: (context) => TripDetailsPage(
                           tripId: doc['tripId'],
                           tripName: doc['tripName'],
-                          availability: List<Availability>.from(doc['availability'].map((e) => Availability(
-                            userId: e['userID'],
-                            startDate: e['startDate'],
-                            endDate: e['endDate'],
-                          ))),
+                          availability: List<Availability>.from(
+                              doc['availability'].map((e) => Availability(
+                                userId: e['userID'],
+                                startDate: e['startDate'],
+                                endDate: e['endDate'],
+                              ))),
                           locations: List<String>.from(doc['locations']),
                           db: _firestoreService,
-                          // members: [],
+                          isCreator: isCreator,
                         ),
                       ),
                     );
