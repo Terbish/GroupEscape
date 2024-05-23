@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:group_escape/models/trip_model.dart';
 import 'package:group_escape/services/push_notifications.dart';
@@ -73,7 +74,7 @@ class FirestoreService {
 
       Map<String, dynamic> userMap = availability.firstWhere(
             (map) => map['userID'] == userId,
-            orElse: () => null,
+        orElse: () => null,
       );
 
       await _db.collection('trips').doc(tripId).update({
@@ -112,4 +113,42 @@ class FirestoreService {
       return dict;
     }).toList());
   }
+
+
+  Future<void> addLocationToTrip(String tripId, String location) async {
+    await _db.collection('trips').doc(tripId).update({
+      'locations': FieldValue.arrayUnion([location]),
+    });
+  }
+
+  Future<void> voteForLocation(String tripId, String location) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    await _db.collection('trips').doc(tripId).update({
+      'locationVotes.$location': FieldValue.arrayUnion([userId]),
+    });
+  }
+
+  Future<void> endLocationVoting(String tripId) async {
+    final tripDoc = await _db.collection('trips').doc(tripId).get();
+    final locationVotes =
+    tripDoc.data()!['locationVotes'] as Map<String, dynamic>;
+    String finalLocation = '';
+    int maxVotes = 0;
+    locationVotes.forEach((location, votes) {
+      final votesList = votes as List<dynamic>;
+      if (votesList.length > maxVotes) {
+        maxVotes = votesList.length;
+        finalLocation = location;
+      }
+    });
+    await _db.collection('trips').doc(tripId).update({
+      'finalLocation': finalLocation,
+    });
+  }
+
+  Future<String> getFinalLocation(String tripId) async {
+    final tripDoc = await _db.collection('trips').doc(tripId).get();
+    return tripDoc.data()!['finalLocation'] as String;
+  }
+
 }

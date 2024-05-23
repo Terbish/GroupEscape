@@ -13,7 +13,7 @@ class CreateTrip extends StatefulWidget {
   final FirebaseAuthentication authInstance;
   final FirestoreService firestoreService;
   CreateTrip(this.authInstance, {super.key, FirestoreService? fS}):
-      firestoreService = fS ?? FirestoreService();
+        firestoreService = fS ?? FirestoreService();
 
 
   @override
@@ -23,8 +23,6 @@ class _CreateTripState extends State<CreateTrip> {
   final _formKey = GlobalKey<FormState>();
 
   String _tripName = '';
-  // String _startDate = '';
-  // String _endDate = '';
   List<String> _locations = [];
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
@@ -62,8 +60,6 @@ class _CreateTripState extends State<CreateTrip> {
       TripModel tripModel = TripModel(
         userIds: userIds,
         tripName: _tripName,
-        // startDate: _startDate.toString(),
-        // endDate: _endDate.toString(),
         locations: _locations,
         availability: [availability],
       );
@@ -91,7 +87,7 @@ class _CreateTripState extends State<CreateTrip> {
         backgroundColor: Colors.blue,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0), // Increased vertical padding
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: Form(
           key: _formKey,
           child: Column(
