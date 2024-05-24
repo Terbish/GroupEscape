@@ -144,11 +144,11 @@ class FirestoreService {
     await _db.collection('trips').doc(tripId).update({
       'finalLocation': finalLocation,
     });
+    await _pushNotifications!.sendFinalizedNotification(topic: tripId);
   }
 
   Future<String> getFinalLocation(String tripId) async {
     final tripDoc = await _db.collection('trips').doc(tripId).get();
     return tripDoc.data()!['finalLocation'] as String;
   }
-
 }

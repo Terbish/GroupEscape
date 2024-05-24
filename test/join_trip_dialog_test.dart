@@ -33,7 +33,7 @@ void main() {
       expect(find.text('Join Trip'), findsOneWidget);
       expect(find.text('Cancel'), findsOneWidget);
       expect(find.text('Join'), findsOneWidget);
-      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
     });
 
     testWidgets('Test Cancel button', (WidgetTester tester) async {
@@ -55,11 +55,8 @@ void main() {
           )
       );
 
-
-
-
       expect(find.text('ID is required'), findsOneWidget);
-      await tester.enterText(find.byType(TextFormField),"xyz");
+      await tester.enterText(find.byType(TextFormField).at(0),"xyz");
       await tester.pumpAndSettle();
 
       expect(find.text('ID is required'), findsNothing);
@@ -74,6 +71,7 @@ void main() {
         return Future.value(true);
       });
       when(fS.subscribeToTopic(any)).thenAnswer((_) async {});
+      when(fS.addLocationToTrip('1','2')).thenAnswer((_) async {});
 
 
       await tester.pumpWidget(
@@ -85,7 +83,8 @@ void main() {
       when(fS.addUserToTrip(any, any)).thenAnswer((_) async {});
       when(firebaseInstance.currentUser()).thenReturn('user1');
 
-      await tester.enterText(find.byType(TextFormField),"xyz");
+      await tester.enterText(find.byType(TextFormField).at(0),"xyz");
+      await tester.enterText(find.byType(TextFormField).at(1),"xyz");
       await tester.pumpAndSettle();
 
       expect(find.text('ID is required'), findsNothing);
@@ -106,7 +105,7 @@ void main() {
       when(fS.addUserToTrip(any, any)).thenAnswer((_) async {});
       when(firebaseInstance.currentUser()).thenReturn('user1');
 
-      await tester.enterText(find.byType(TextFormField),"xyz");
+      await tester.enterText(find.byType(TextFormField).at(0),"xyz");
       await tester.pumpAndSettle();
 
       expect(find.text('ID is required'), findsNothing);

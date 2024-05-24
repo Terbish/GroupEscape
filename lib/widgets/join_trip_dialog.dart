@@ -28,7 +28,7 @@ class _JoinTripDialogState extends State<JoinTripDialog> {
           _controller.text, widget.authInstance.currentUser());
       await widget.firestoreService.sendNotification(topic: _controller.text);
       await widget.firestoreService.subscribeToTopic(_controller.text);
-      await widget.firestoreService.addLocationToTrip(_controller.text, _locationController.text);
+      if (_locationController.text != '') await widget.firestoreService.addLocationToTrip(_controller.text, _locationController.text);
       Navigator.pop(context, _controller.text);
     }
   }
@@ -54,7 +54,7 @@ class _JoinTripDialogState extends State<JoinTripDialog> {
           TextFormField(
             controller: _locationController,
             decoration: const InputDecoration(
-              labelText: 'Add Location',
+              labelText: 'Where do you want to go?',
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.blue),
               ),

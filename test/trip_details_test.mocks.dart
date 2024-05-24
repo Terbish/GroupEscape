@@ -153,6 +153,65 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
         ),
         returnValue: _i3.Stream<List<Map<String, dynamic>>>.empty(),
       ) as _i3.Stream<List<Map<String, dynamic>>>);
+
+  @override
+  _i3.Future<void> addLocationToTrip(
+    String? tripId,
+    String? location,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addLocationToTrip,
+          [
+            tripId,
+            location,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> voteForLocation(
+    String? tripId,
+    String? location,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #voteForLocation,
+          [
+            tripId,
+            location,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> endLocationVoting(String? tripId) => (super.noSuchMethod(
+        Invocation.method(
+          #endLocationVoting,
+          [tripId],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<String> getFinalLocation(String? tripId) => (super.noSuchMethod(
+        Invocation.method(
+          #getFinalLocation,
+          [tripId],
+        ),
+        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getFinalLocation,
+            [tripId],
+          ),
+        )),
+      ) as _i3.Future<String>);
 }
 
 /// A class which mocks [FirebaseAuthentication].

@@ -38,7 +38,9 @@ void main() {
             tripName: "test123",
             availability: mockAvailability,
             locations: ['Seattle', 'Frankfurt'],
-            db: mockFirestore),
+            db: mockFirestore,
+            isCreator: true,
+        )
       ));
 
       await tester.tap(find.byIcon(Icons.ios_share));
@@ -47,7 +49,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('test123'), findsOneWidget);
-      expect(find.text('Location(s): Seattle, Frankfurt'), findsOneWidget);
+      expect(find.text('Location(s):'), findsOneWidget);
       expect(find.byType(Container), findsNWidgets(2));
     });
 
@@ -74,7 +76,9 @@ void main() {
             tripName: "test123",
             availability: mockAvailability,
             locations: ['Seattle', 'Frankfurt'],
-            db: mockDb),
+            db: mockDb,
+            isCreator: true,
+        )
       ));
 
       expect(find.text('Loading...'), findsNWidgets(2));

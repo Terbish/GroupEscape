@@ -27,10 +27,20 @@ class PushNotifications {
     final response = await callable.call(<String, dynamic>{
       'topic': topic,
     });
-    print('\n\n\n$topic\n\n\n');
-    print('\n\n\n${await _firebaseMessaging.getToken()}\n\n\n');
 
-    print('\n\n\nresult is ${response.data ?? 'No data came back'}');
+    if (response.data == null) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> sendFinalizedNotification ({required String topic}) async {
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+        'sendFinalizedNotification');
+
+    final response = await callable.call(<String, dynamic>{
+      'topic': topic,
+    });
     if (response.data == null) {
       return false;
     }
