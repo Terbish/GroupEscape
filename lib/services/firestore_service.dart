@@ -151,4 +151,5 @@ class FirestoreService {
     final tripDoc = await _db.collection('trips').doc(tripId).get();
     return tripDoc.data()!['finalLocation'] as String;
   }
+
 }

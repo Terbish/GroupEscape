@@ -85,9 +85,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double containerHeight = screenHeight * 0.3;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -114,117 +111,125 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 8.0),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: Colors.green[100],
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                children: [
-                   Text('Member Availabilities:',
-                      style:
-                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  for (var avail in widget.availability)
-                    FutureBuilder<String>(
-                      future: widget.db.getUserName(avail.userId),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Text(
-                              'Loading...');
-                        } else if (snapshot.hasError) {
-                          return Text(
-                              'Error: ${snapshot.error}');
-                        } else {
-                          return Text(
-                              '${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
-                        }
-                      },
-                    ),
-                  calculateRange(widget.availability)
-                      ? Text(
-                    "\nAvailable Time-range:\n${DateFormat('MM/dd/yyyy').format(widget.rangeStart!.toDate())} to ${DateFormat('MM/dd/yyyy').format(widget.rangeEnd!.toDate())}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                      : Text(
-                    "\nNo overlap in availabilities",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
+            _buildAvailabilitiesContainer(),
             const SizedBox(height: 8.0),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: Colors.orange[100],
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!showVotingResult)
-                    Text('Location(s):',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                  if (!showVotingResult) const SizedBox(height: 8.0),
-                  if (!showVotingResult)
-                    for (var location in widget.locations)
-                      RadioListTile(
-                        title: Text(location),
-                        value: location,
-                        groupValue: selectedLocation,
-                        onChanged: hasVoted
-                            ? null
-                            : (value) {
-                          setState(() {
-                            selectedLocation = value as String?;
-                          });
-                        },
-                      ),
-                  if (!showVotingResult && !hasVoted)
-                    ElevatedButton(
-                      onPressed: submitVote,
-                      child: Text('Submit Vote'),
-                    ),
-                  if (hasVoted)
-                    Text(
-                      'You have already voted.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                  if (widget.isCreator && !showVotingResult)
-                    ElevatedButton(
-                      onPressed: endVoting,
-                      child: Text('End Voting'),
-                    ),
-                  if (showVotingResult)
-                    FutureBuilder<String>(
-                      future: widget.db.getFinalLocation(widget.tripId),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return Text(
-                            'Final Location: ${snapshot.data}',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          );
-                        }
-                      },
-                    ),
-                ],
-              ),
-            ),
+            _buildLocationsContainer(),
             const SizedBox(height: 16.0),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAvailabilitiesContainer() {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.green[100],
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        children: [
+          Text('Member Availabilities:',
+              style:
+              TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          for (var avail in widget.availability)
+            FutureBuilder<String>(
+              future: widget.db.getUserName(avail.userId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return Text(
+                      'Loading...');
+                } else if (snapshot.hasError) {
+                  return Text(
+                      'Error: ${snapshot.error}');
+                } else {
+                  return Text(
+                      '${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
+                }
+              },
+            ),
+          calculateRange(widget.availability)
+              ? Text(
+            "\nAvailable Time-range:\n${DateFormat('MM/dd/yyyy').format(widget.rangeStart!.toDate())} to ${DateFormat('MM/dd/yyyy').format(widget.rangeEnd!.toDate())}",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )
+              : Text(
+            "\nNo overlap in availabilities",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationsContainer() {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.orange[100],
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!showVotingResult)
+            Text('Location(s):',
+                style: TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.bold)),
+          if (!showVotingResult) const SizedBox(height: 8.0),
+          if (!showVotingResult)
+            for (var location in widget.locations)
+              RadioListTile(
+                title: Text(location),
+                value: location,
+                groupValue: selectedLocation,
+                onChanged: hasVoted
+                    ? null
+                    : (value) {
+                  setState(() {
+                    selectedLocation = value as String?;
+                  });
+                },
+              ),
+          if (!showVotingResult && !hasVoted)
+            ElevatedButton(
+              onPressed: submitVote,
+              child: Text('Submit Vote'),
+            ),
+          if (hasVoted)
+            Text(
+              'You have already voted.',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+          if (widget.isCreator && !showVotingResult)
+            ElevatedButton(
+              onPressed: endVoting,
+              child: Text('End Voting'),
+            ),
+          if (showVotingResult)
+            FutureBuilder<String>(
+              future: widget.db.getFinalLocation(widget.tripId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Text(
+                    'Final Location: ${snapshot.data}',
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  );
+                }
+              },
+            ),
+        ],
       ),
     );
   }
