@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/services/firestore_service.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';

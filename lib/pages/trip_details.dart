@@ -98,7 +98,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
         backgroundColor: Colors.blue,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.ios_share),
+            icon: const Icon(Icons.ios_share),
             onPressed: () {
               Share.share('Check out this trip: ${widget.tripId}');
             },
@@ -130,7 +130,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       ),
       child: Column(
         children: [
-          Text('Member Availabilities:',
+          const Text('Member Availabilities:',
               style:
               TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           for (var avail in widget.availability)
@@ -139,7 +139,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState ==
                     ConnectionState.waiting) {
-                  return Text(
+                  return const Text(
                       'Loading...');
                 } else if (snapshot.hasError) {
                   return Text(
@@ -153,9 +153,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           calculateRange(widget.availability)
               ? Text(
             "\nAvailable Time-range:\n${DateFormat('MM/dd/yyyy').format(widget.rangeStart!.toDate())} to ${DateFormat('MM/dd/yyyy').format(widget.rangeEnd!.toDate())}",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )
-              : Text(
+              : const Text(
             "\nNo overlap in availabilities",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -175,7 +175,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!showVotingResult)
-            Text('Location(s):',
+            const Text('Location(s):',
                 style: TextStyle(
                     fontSize: 18, fontWeight: FontWeight.bold)),
           if (!showVotingResult) const SizedBox(height: 8.0),
@@ -196,10 +196,10 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           if (!showVotingResult && !hasVoted)
             ElevatedButton(
               onPressed: submitVote,
-              child: Text('Submit Vote'),
+              child: const Text('Submit Vote'),
             ),
           if (hasVoted)
-            Text(
+            const Text(
               'You have already voted.',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -209,7 +209,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           if (widget.isCreator && !showVotingResult)
             ElevatedButton(
               onPressed: endVoting,
-              child: Text('End Voting'),
+              child: const Text('End Voting'),
             ),
           if (showVotingResult)
             FutureBuilder<String>(
@@ -217,13 +217,13 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState ==
                     ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Text(
                     'Final Location: ${snapshot.data}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   );
                 }

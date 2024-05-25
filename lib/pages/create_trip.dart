@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:group_escape/util/availability.dart';
 import 'package:intl/intl.dart';
-
 import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
 
@@ -165,7 +164,7 @@ class _CreateTripState extends State<CreateTrip> {
   Widget _buildSelectedDatesText() {
     return Text(
       'Selected Dates:\n${DateFormat('MM/dd/yyyy').format(_startDate!)} to ${DateFormat('MM/dd/yyyy').format(_endDate!)}',
-      style: TextStyle(fontSize: 16.0),
+      style: const TextStyle(fontSize: 16.0),
     );
   }
 
