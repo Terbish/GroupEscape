@@ -26,9 +26,15 @@ class _JoinTripDialogState extends State<JoinTripDialog> {
       await widget.firestoreService.sendNotification(topic: _controller.text);
       await widget.firestoreService.subscribeToTopic(_controller.text);
 
-      final locations = _locationController.text.split(',').map((location) => location.trim()).toList();
-      for (final location in locations) {
-        await widget.firestoreService.addLocationToTrip(_controller.text, location);
+      if (_locationController.text.isNotEmpty) {
+        final locations = _locationController.text
+            .split(',')
+            .map((location) => location.trim())
+            .toList();
+        for (final location in locations) {
+          await widget.firestoreService.addLocationToTrip(
+              _controller.text, location);
+        }
       }
 
       Navigator.pop(context, _controller.text);

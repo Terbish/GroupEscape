@@ -7,6 +7,8 @@ class TripModel {
   final List<Availability> availability;
   final Map<String, List<String>> locationVotes;
   final String finalLocation;
+  final Map<String, bool> userVotes;
+
 
   TripModel({
     required this.userIds,
@@ -15,6 +17,7 @@ class TripModel {
     required this.availability,
     this.locationVotes = const {},
     this.finalLocation = '',
+    this.userVotes = const {},
   });
 
   Map<String, dynamic> toJson() {
@@ -25,6 +28,7 @@ class TripModel {
       'availability': availability.map((e) => e.toJson()).toList(),
       'locationVotes': locationVotes,
       'finalLocation': finalLocation,
+      'userVotes': userVotes,
     };
   }
 }

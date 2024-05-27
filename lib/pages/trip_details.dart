@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
@@ -105,21 +106,40 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 8.0),
-            _buildAvailabilitiesContainer(),
-            const SizedBox(height: 8.0),
-            _buildLocationsContainer(),
-            const SizedBox(height: 16.0),
-          ],
-        ),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: widget.db.getTripDetails(widget.tripId),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+
+          final data = snapshot.data!.data() as Map<String, dynamic>;
+          final userVotes = data['userVotes'] as Map<String, dynamic>? ?? {};
+          final userId = FirebaseAuth.instance.currentUser!.uid;
+          final hasVoted = userVotes[userId] == true;
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 8.0),
+                _buildAvailabilitiesContainer(),
+                const SizedBox(height: 8.0),
+                _buildLocationsContainer(hasVoted),
+                const SizedBox(height: 16.0),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
+
 
   Widget _buildAvailabilitiesContainer() {
     return Container(
@@ -164,7 +184,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     );
   }
 
-  Widget _buildLocationsContainer() {
+  Widget _buildLocationsContainer(bool hasVoted) {
     return Container(
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
