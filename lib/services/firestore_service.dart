@@ -160,4 +160,7 @@ class FirestoreService {
     return await _db.collection('trips').doc(tripId).get();
   }
 
+  Stream<DocumentSnapshot> getTripStream(String tripId) {
+    return _db.collection('trips').doc(tripId).snapshots();
+  }
 }

@@ -68,7 +68,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   }
 
   void submitVote() {
-    if (selectedLocation != null && !hasVoted) {
+    if (selectedLocation != null) {
       voteForLocation(selectedLocation!);
       setState(() {
         hasVoted = true;
@@ -166,13 +166,18 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                       'Error: ${snapshot.error}');
                 } else {
                   return Text(
-                      '${snapshot.data ?? "Unknown User"}: ${DateFormat('MM/dd/yyyy').format(avail.startDate.toDate())} - ${DateFormat('MM/dd/yyyy').format(avail.endDate.toDate())}');
+                      '${snapshot.data ?? "Unknown User"}: ${DateFormat(
+                          'MM/dd/yyyy').format(
+                          avail.startDate.toDate())} - ${DateFormat(
+                          'MM/dd/yyyy').format(avail.endDate.toDate())}');
                 }
               },
             ),
           calculateRange(widget.availability)
               ? Text(
-            "\nAvailable Time-range:\n${DateFormat('MM/dd/yyyy').format(widget.rangeStart!.toDate())} to ${DateFormat('MM/dd/yyyy').format(widget.rangeEnd!.toDate())}",
+            "\nAvailable Time-range:\n${DateFormat('MM/dd/yyyy').format(
+                widget.rangeStart!.toDate())} to ${DateFormat('MM/dd/yyyy')
+                .format(widget.rangeEnd!.toDate())}",
             style: const TextStyle(fontWeight: FontWeight.bold),
           )
               : const Text(
@@ -185,72 +190,77 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   }
 
   Widget _buildLocationsContainer(bool hasVoted) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: Colors.orange[100],
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!showVotingResult)
-            const Text('Location(s):',
-                style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold)),
-          if (!showVotingResult) const SizedBox(height: 8.0),
-          if (!showVotingResult)
-            for (var location in widget.locations)
-              RadioListTile(
-                title: Text(location),
-                value: location,
-                groupValue: selectedLocation,
-                onChanged: hasVoted
-                    ? null
-                    : (value) {
-                  setState(() {
-                    selectedLocation = value as String?;
-                  });
-                },
-              ),
-          if (!showVotingResult && !hasVoted)
-            ElevatedButton(
-              onPressed: submitVote,
-              child: const Text('Submit Vote'),
-            ),
-          if (hasVoted)
-            const Text(
-              'You have already voted.',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-          if (widget.isCreator && !showVotingResult)
-            ElevatedButton(
-              onPressed: endVoting,
-              child: const Text('End Voting'),
-            ),
-          if (showVotingResult)
-            FutureBuilder<String>(
-              future: widget.db.getFinalLocation(widget.tripId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return Text(
-                    'Final Location: ${snapshot.data}',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  );
-                }
-              },
-            ),
-        ],
-      ),
+    return StreamBuilder<DocumentSnapshot>(
+      stream: widget.db.getTripStream(widget.tripId),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+        final showVotingResult = data['finalLocation'] != null &&
+            data['finalLocation'] != '';
+
+        return Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            color: Colors.orange[100],
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!showVotingResult)
+                const Text('Location(s):',
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+              if (!showVotingResult) const SizedBox(height: 8.0),
+              if (!showVotingResult)
+                for (var location in widget.locations)
+                  RadioListTile(
+                    title: Text(location),
+                    value: location,
+                    groupValue: selectedLocation,
+                    onChanged: hasVoted
+                        ? null
+                        : (value) {
+                      setState(() {
+                        selectedLocation = value as String?;
+                      });
+                    },
+                  ),
+              if (!showVotingResult && !hasVoted)
+                ElevatedButton(
+                  onPressed: submitVote,
+                  child: const Text('Submit Vote'),
+                ),
+              if (hasVoted)
+                const Text(
+                  'You have already voted.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+              if (widget.isCreator && !showVotingResult)
+                ElevatedButton(
+                  onPressed: endVoting,
+                  child: const Text('End Voting'),
+                ),
+              if (showVotingResult)
+                Text(
+                  'Final Location: ${data['finalLocation']}',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
