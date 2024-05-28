@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/services/firestore_service.dart';
-import 'package:group_escape/util/availability.dart';
-
 import '../shared/firebase_authentication.dart';
 
 class JoinTripDialog extends StatefulWidget {
@@ -28,7 +25,18 @@ class _JoinTripDialogState extends State<JoinTripDialog> {
           _controller.text, widget.authInstance.currentUser());
       await widget.firestoreService.sendNotification(topic: _controller.text);
       await widget.firestoreService.subscribeToTopic(_controller.text);
-      if (_locationController.text != '') await widget.firestoreService.addLocationToTrip(_controller.text, _locationController.text);
+
+      if (_locationController.text.isNotEmpty) {
+        final locations = _locationController.text
+            .split(',')
+            .map((location) => location.trim())
+            .toList();
+        for (final location in locations) {
+          await widget.firestoreService.addLocationToTrip(
+              _controller.text, location);
+        }
+      }
+
       Navigator.pop(context, _controller.text);
     }
   }

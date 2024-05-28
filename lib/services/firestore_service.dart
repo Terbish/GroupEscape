@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:group_escape/models/trip_model.dart';
@@ -123,9 +122,14 @@ class FirestoreService {
 
   Future<void> voteForLocation(String tripId, String location) async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
-    await _db.collection('trips').doc(tripId).update({
-      'locationVotes.$location': FieldValue.arrayUnion([userId]),
-    });
+    final tripDoc = await _db.collection('trips').doc(tripId).get();
+    final userVotes = tripDoc.data()!['userVotes'] as Map<String, dynamic>? ?? {};
+    if (userVotes[userId] != true) {
+      await _db.collection('trips').doc(tripId).update({
+        'locationVotes.$location': FieldValue.arrayUnion([userId]),
+        'userVotes.$userId': true,
+      });
+    }
   }
 
   Future<void> endLocationVoting(String tripId) async {
@@ -150,5 +154,13 @@ class FirestoreService {
   Future<String> getFinalLocation(String tripId) async {
     final tripDoc = await _db.collection('trips').doc(tripId).get();
     return tripDoc.data()!['finalLocation'] as String;
+  }
+
+  Future<DocumentSnapshot> getTripDetails(String tripId) async {
+    return await _db.collection('trips').doc(tripId).get();
+  }
+
+  Stream<DocumentSnapshot> getTripStream(String tripId) {
+    return _db.collection('trips').doc(tripId).snapshots();
   }
 }

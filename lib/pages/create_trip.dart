@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:group_escape/shared/firebase_authentication.dart';
 import 'package:group_escape/util/availability.dart';
 import 'package:intl/intl.dart';
-
 import '../models/trip_model.dart';
 import '../services/firestore_service.dart';
 
@@ -15,10 +12,10 @@ class CreateTrip extends StatefulWidget {
   CreateTrip(this.authInstance, {super.key, FirestoreService? fS}):
         firestoreService = fS ?? FirestoreService();
 
-
   @override
   _CreateTripState createState() => _CreateTripState();
 }
+
 class _CreateTripState extends State<CreateTrip> {
   final _formKey = GlobalKey<FormState>();
 
@@ -47,7 +44,6 @@ class _CreateTripState extends State<CreateTrip> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Get currently logged-in user's UID
       List<String> userIds = [widget.authInstance.currentUser()];
 
       Availability availability = Availability(
@@ -56,7 +52,6 @@ class _CreateTripState extends State<CreateTrip> {
         endDate: Timestamp.fromDate(_endDate),
       );
 
-      // Create a new TripModel object
       TripModel tripModel = TripModel(
         userIds: userIds,
         tripName: _tripName,
@@ -70,7 +65,6 @@ class _CreateTripState extends State<CreateTrip> {
       Navigator.pop(context);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,91 +87,103 @@ class _CreateTripState extends State<CreateTrip> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Trip Name',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a trip name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _tripName = value!;
-                },
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Locations',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter at least one location';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _locations = value!.split(',');
-                },
-              ),
-
+              _buildTripNameField(),
+              _buildLocationsField(),
               const SizedBox(height: 24.0),
-
-              SizedBox(
-                width: double.infinity,
-                height: 48.0,
-                child: ElevatedButton(
-                  onPressed: () => _showDateRangePicker(context),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Add Dates',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-              ),
-
+              _buildDateRangeButton(context),
               const SizedBox(height: 16.0),
-
-              if (selectedTime)
-                Text(
-                  'Selected Dates:\n${DateFormat('MM/dd/yyyy').format(_startDate!)} to ${DateFormat('MM/dd/yyyy').format(_endDate!)}',
-                  style: TextStyle(fontSize: 16.0),
-                ),
+              if (selectedTime) _buildSelectedDatesText(),
               const SizedBox(height: 16.0),
-
-
-              SizedBox(
-                width: double.infinity,
-                height: 48.0,
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Create Trip',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ),
-              ),
+              _buildSubmitButton(),
             ],
           ),
         ),
       ),
+    );
+  }
 
+  Widget _buildTripNameField() {
+    return TextFormField(
+      decoration: const InputDecoration(
+        labelText: 'Trip Name',
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter a trip name';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _tripName = value!;
+      },
+    );
+  }
+
+  Widget _buildLocationsField() {
+    return TextFormField(
+      decoration: const InputDecoration(
+        labelText: 'Locations',
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter at least one location';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        _locations = value!.split(',');
+      },
+    );
+  }
+
+  Widget _buildDateRangeButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48.0,
+      child: ElevatedButton(
+        onPressed: () => _showDateRangePicker(context),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: const Text(
+          'Add Dates',
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSelectedDatesText() {
+    return Text(
+      'Selected Dates:\n${DateFormat('MM/dd/yyyy').format(_startDate!)} to ${DateFormat('MM/dd/yyyy').format(_endDate!)}',
+      style: const TextStyle(fontSize: 16.0),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 48.0,
+      child: ElevatedButton(
+        onPressed: _submitForm,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: const Text(
+          'Create Trip',
+          style: TextStyle(color: Colors.blue),
+        ),
+      ),
     );
   }
 }
