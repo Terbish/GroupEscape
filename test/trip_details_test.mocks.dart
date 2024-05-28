@@ -3,14 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
-import 'package:group_escape/models/trip_model.dart' as _i4;
-import 'package:group_escape/services/firestore_service.dart' as _i2;
-import 'package:group_escape/shared/firebase_authentication.dart' as _i7;
-import 'package:group_escape/util/availability.dart' as _i6;
+import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
+import 'package:group_escape/models/trip_model.dart' as _i5;
+import 'package:group_escape/services/firestore_service.dart' as _i3;
+import 'package:group_escape/shared/firebase_authentication.dart' as _i8;
+import 'package:group_escape/util/availability.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i5;
+import 'package:mockito/src/dummies.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -25,54 +26,87 @@ import 'package:mockito/src/dummies.dart' as _i5;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeDocumentSnapshot_0<T extends Object?> extends _i1.SmartFake
+    implements _i2.DocumentSnapshot<T> {
+  _FakeDocumentSnapshot_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDocumentReference_1<T1 extends Object?> extends _i1.SmartFake
+    implements _i2.DocumentReference<T1> {
+  _FakeDocumentReference_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeSnapshotMetadata_2 extends _i1.SmartFake
+    implements _i2.SnapshotMetadata {
+  _FakeSnapshotMetadata_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [FirestoreService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
+class MockFirestoreService extends _i1.Mock implements _i3.FirestoreService {
   MockFirestoreService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<void> subscribeToTopic(dynamic tripId) => (super.noSuchMethod(
+  _i4.Future<void> subscribeToTopic(dynamic tripId) => (super.noSuchMethod(
         Invocation.method(
           #subscribeToTopic,
           [tripId],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<bool> sendNotification({required String? topic}) =>
+  _i4.Future<bool> sendNotification({required String? topic}) =>
       (super.noSuchMethod(
         Invocation.method(
           #sendNotification,
           [],
           {#topic: topic},
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 
   @override
-  _i3.Future<String> addTrip(_i4.TripModel? trip) => (super.noSuchMethod(
+  _i4.Future<String> addTrip(_i5.TripModel? trip) => (super.noSuchMethod(
         Invocation.method(
           #addTrip,
           [trip],
         ),
-        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
           this,
           Invocation.method(
             #addTrip,
             [trip],
           ),
         )),
-      ) as _i3.Future<String>);
+      ) as _i4.Future<String>);
 
   @override
-  _i3.Future<void> addAvailability(
+  _i4.Future<void> addAvailability(
     String? tripId,
-    _i6.Availability? availability,
+    _i7.Availability? availability,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -82,12 +116,12 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
             availability,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<void> deleteTrip(
+  _i4.Future<void> deleteTrip(
     String? tripId,
     String? userId,
   ) =>
@@ -99,21 +133,21 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
             userId,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<bool> checkIfExists(String? tripId) => (super.noSuchMethod(
+  _i4.Future<bool> checkIfExists(String? tripId) => (super.noSuchMethod(
         Invocation.method(
           #checkIfExists,
           [tripId],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 
   @override
-  _i3.Future<void> addUserToTrip(
+  _i4.Future<void> addUserToTrip(
     String? tripId,
     String? userId,
   ) =>
@@ -125,37 +159,37 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
             userId,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<String> getUserName(String? userId) => (super.noSuchMethod(
+  _i4.Future<String> getUserName(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #getUserName,
           [userId],
         ),
-        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
           this,
           Invocation.method(
             #getUserName,
             [userId],
           ),
         )),
-      ) as _i3.Future<String>);
+      ) as _i4.Future<String>);
 
   @override
-  _i3.Stream<List<Map<String, dynamic>>> getTripsStream(String? userId) =>
+  _i4.Stream<List<Map<String, dynamic>>> getTripsStream(String? userId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getTripsStream,
           [userId],
         ),
-        returnValue: _i3.Stream<List<Map<String, dynamic>>>.empty(),
-      ) as _i3.Stream<List<Map<String, dynamic>>>);
+        returnValue: _i4.Stream<List<Map<String, dynamic>>>.empty(),
+      ) as _i4.Stream<List<Map<String, dynamic>>>);
 
   @override
-  _i3.Future<void> addLocationToTrip(
+  _i4.Future<void> addLocationToTrip(
     String? tripId,
     String? location,
   ) =>
@@ -167,12 +201,12 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
             location,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<void> voteForLocation(
+  _i4.Future<void> voteForLocation(
     String? tripId,
     String? location,
   ) =>
@@ -184,41 +218,68 @@ class MockFirestoreService extends _i1.Mock implements _i2.FirestoreService {
             location,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<void> endLocationVoting(String? tripId) => (super.noSuchMethod(
+  _i4.Future<void> endLocationVoting(String? tripId) => (super.noSuchMethod(
         Invocation.method(
           #endLocationVoting,
           [tripId],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<String> getFinalLocation(String? tripId) => (super.noSuchMethod(
+  _i4.Future<String> getFinalLocation(String? tripId) => (super.noSuchMethod(
         Invocation.method(
           #getFinalLocation,
           [tripId],
         ),
-        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
           this,
           Invocation.method(
             #getFinalLocation,
             [tripId],
           ),
         )),
-      ) as _i3.Future<String>);
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<_i2.DocumentSnapshot<Object?>> getTripDetails(String? tripId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getTripDetails,
+          [tripId],
+        ),
+        returnValue: _i4.Future<_i2.DocumentSnapshot<Object?>>.value(
+            _FakeDocumentSnapshot_0<Object?>(
+          this,
+          Invocation.method(
+            #getTripDetails,
+            [tripId],
+          ),
+        )),
+      ) as _i4.Future<_i2.DocumentSnapshot<Object?>>);
+
+  @override
+  _i4.Stream<_i2.DocumentSnapshot<Object?>> getTripStream(String? tripId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getTripStream,
+          [tripId],
+        ),
+        returnValue: _i4.Stream<_i2.DocumentSnapshot<Object?>>.empty(),
+      ) as _i4.Stream<_i2.DocumentSnapshot<Object?>>);
 }
 
 /// A class which mocks [FirebaseAuthentication].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebaseAuthentication extends _i1.Mock
-    implements _i7.FirebaseAuthentication {
+    implements _i8.FirebaseAuthentication {
   MockFirebaseAuthentication() {
     _i1.throwOnMissingStub(this);
   }
@@ -229,7 +290,7 @@ class MockFirebaseAuthentication extends _i1.Mock
           #currentUser,
           [],
         ),
-        returnValue: _i5.dummyValue<String>(
+        returnValue: _i6.dummyValue<String>(
           this,
           Invocation.method(
             #currentUser,
@@ -239,7 +300,7 @@ class MockFirebaseAuthentication extends _i1.Mock
       ) as String);
 
   @override
-  _i3.Future<String?> createUser(
+  _i4.Future<String?> createUser(
     String? email,
     String? password,
   ) =>
@@ -251,11 +312,11 @@ class MockFirebaseAuthentication extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 
   @override
-  _i3.Future<String?> login(
+  _i4.Future<String?> login(
     String? email,
     String? password,
   ) =>
@@ -267,15 +328,70 @@ class MockFirebaseAuthentication extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i3.Future<String?>.value(),
-      ) as _i3.Future<String?>);
+        returnValue: _i4.Future<String?>.value(),
+      ) as _i4.Future<String?>);
 
   @override
-  _i3.Future<bool> logout() => (super.noSuchMethod(
+  _i4.Future<bool> logout() => (super.noSuchMethod(
         Invocation.method(
           #logout,
           [],
         ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+}
+
+/// A class which mocks [DocumentSnapshot].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
+    implements _i2.DocumentSnapshot<T> {
+  MockDocumentSnapshot() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String get id => (super.noSuchMethod(
+        Invocation.getter(#id),
+        returnValue: _i6.dummyValue<String>(
+          this,
+          Invocation.getter(#id),
+        ),
+      ) as String);
+
+  @override
+  _i2.DocumentReference<T> get reference => (super.noSuchMethod(
+        Invocation.getter(#reference),
+        returnValue: _FakeDocumentReference_1<T>(
+          this,
+          Invocation.getter(#reference),
+        ),
+      ) as _i2.DocumentReference<T>);
+
+  @override
+  _i2.SnapshotMetadata get metadata => (super.noSuchMethod(
+        Invocation.getter(#metadata),
+        returnValue: _FakeSnapshotMetadata_2(
+          this,
+          Invocation.getter(#metadata),
+        ),
+      ) as _i2.SnapshotMetadata);
+
+  @override
+  bool get exists => (super.noSuchMethod(
+        Invocation.getter(#exists),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  dynamic get(Object? field) => super.noSuchMethod(Invocation.method(
+        #get,
+        [field],
+      ));
+
+  @override
+  dynamic operator [](Object? field) => super.noSuchMethod(Invocation.method(
+        #[],
+        [field],
+      ));
 }

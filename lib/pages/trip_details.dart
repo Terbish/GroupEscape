@@ -15,6 +15,7 @@ class TripDetailsPage extends StatefulWidget {
   Timestamp? rangeStart;
   Timestamp? rangeEnd;
   final bool isCreator;
+  final String userId;
 
   TripDetailsPage({
     super.key,
@@ -24,6 +25,7 @@ class TripDetailsPage extends StatefulWidget {
     required this.locations,
     required this.db,
     required this.isCreator,
+    required this.userId,
   });
 
   @override
@@ -119,8 +121,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
 
           final data = snapshot.data!.data() as Map<String, dynamic>;
           final userVotes = data['userVotes'] as Map<String, dynamic>? ?? {};
-          final userId = FirebaseAuth.instance.currentUser!.uid;
-          final hasVoted = userVotes[userId] == true;
+          // final userId = FirebaseAuth.instance.currentUser!.uid;
+          final hasVoted = userVotes[widget.userId] == true;
 
           return Padding(
             padding: const EdgeInsets.all(16.0),

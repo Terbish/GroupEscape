@@ -142,7 +142,7 @@ class HomePage extends StatelessWidget {
                         ))),
                     locations: List<String>.from(doc['locations']),
                     db: _firestoreService,
-                    isCreator: isCreator,
+                    isCreator: isCreator, userId: authInstance.currentUser(),
                   ),
                 ),
               );

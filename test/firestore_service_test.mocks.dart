@@ -39,4 +39,15 @@ class MockPushNotifications extends _i1.Mock implements _i2.PushNotifications {
         ),
         returnValue: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
+
+  @override
+  _i3.Future<bool> sendFinalizedNotification({required String? topic}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #sendFinalizedNotification,
+          [],
+          {#topic: topic},
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
 }
