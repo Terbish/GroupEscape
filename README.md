@@ -1,8 +1,3 @@
-I'll help you create a README for the ChatEscape repository. Let me check the repository details first to ensure the README aligns with your project.
-
-Let me write a more comprehensive README for your ChatEscape repository, based on its description and content.
-
-
 # ChatEscape
 
 ChatEscape is a Flutter-based decision-making application designed to streamline trip planning by helping groups move beyond endless group chat discussions to actual decisions.
